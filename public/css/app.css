@@ -10425,3 +10425,8 @@ a.text-dark:focus {
   color: #007bff;
 }
 
+.beers {
+  max-height: 36vw;
+  overflow-y: auto;
+}
+

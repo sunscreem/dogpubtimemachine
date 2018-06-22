@@ -47332,6 +47332,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['beer'],
 
+    computed: {
+        totalBars: function totalBars() {
+            return this.beer.totalBars + ' bar' + (this.beer.totalBars > 1 ? 's' : '');
+        }
+    },
+
     methods: {
         showBars: function showBars() {
             this.$emit('showBars', this.beer);
@@ -47350,9 +47356,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("span", { staticClass: "link", on: { click: _vm.showBars } }, [
-      _vm._v(
-        _vm._s(_vm.beer.name) + " / " + _vm._s(_vm.beer.brewery) + " (11 bars)"
-      )
+      _vm._v(_vm._s(_vm.beer.nameAndBrewery) + " / " + _vm._s(_vm.totalBars))
     ])
   ])
 }
@@ -47496,14 +47500,14 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "row mb-5" }, [
-    _c("div", { staticClass: "col-6" }, [
+  return _c("div", { staticClass: "row " }, [
+    _c("div", { staticClass: "col-md-6 mb-4" }, [
       _c("div", { staticClass: "card" }, [
         _c("div", { staticClass: "card-header" }, [_vm._v("Click On A Beer:")]),
         _vm._v(" "),
         _c(
           "div",
-          { staticClass: "card-body" },
+          { staticClass: "card-body beers" },
           _vm._l(_vm.beers, function(beer) {
             return _c(
               "div",
@@ -47520,7 +47524,7 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "col-6" }, [
+    _c("div", { staticClass: "col-md-6 mb-4" }, [
       _c("div", { staticClass: "card" }, [
         _c("div", { staticClass: "card-header" }, [
           _vm._v(_vm._s(_vm.beerShowing) + " On Tap In:")

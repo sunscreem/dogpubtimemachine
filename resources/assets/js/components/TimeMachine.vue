@@ -1,16 +1,16 @@
 <template>
-    <div class="row mb-5">
-        <div class="col-6">
+    <div class="row ">
+        <div class="col-md-6 mb-4">
             <div class="card">
                 <div class="card-header">Click On A Beer:</div>
-                <div class="card-body">
+                <div class="card-body beers">
                     <div v-for="beer in beers">
                         <beer :beer="beer" @showBars="getBarsForBeer"></beer>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-6">
+        <div class="col-md-6 mb-4">
             <div class="card">
                 <div class="card-header">{{ beerShowing }} On Tap In:</div>
                 <div class="card-body">
