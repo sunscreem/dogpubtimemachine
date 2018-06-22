@@ -20,7 +20,7 @@
             <h4>Why is called a "Time Machine?"</h4>
             <p>The idea is you'll be able to wind back the clock and see what bars had what beer on in the past.</p>
             <p>Obviously thats not working yet.</p>
-            <h4>It looks awful - is there some of to-do list for fixing it?</h4>
+            <h4>It looks awful - is there some sort of to-do list for fixing it?</h4>
             <p>Indeed - this is an open source project. The to-do list and known bugs are <a href="https://github.com/sunscreem/dogpubtimemachine/issues">right here</a>.</p>
             <h4>The beers/pubs look wrong? Whats going on?</h4>
             <p>To say this was thrown together in an afternoon would be very accurate. Bear with me... it will get better. Hopefully.</p>
