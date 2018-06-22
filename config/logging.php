@@ -3,7 +3,6 @@
 use Monolog\Handler\StreamHandler;
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Default Log Channel
@@ -35,7 +34,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            'channels' => ['single', 'bugsnag'],
         ],
 
         'single' => [
@@ -76,6 +75,9 @@ return [
             'driver' => 'errorlog',
             'level' => 'debug',
         ],
-    ],
 
+        'bugsnag' => [
+            'driver' => 'bugsnag',
+        ],
+    ],
 ];
