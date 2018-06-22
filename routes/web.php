@@ -11,8 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'PagesController@index')->name('home');
 
-route::get('/test', 'PagesController@index');
+Route::get('/bar-has-beer/{beer}', 'BarController@hasBeer')->name('bars.hasBeer');
+
+Route::resource('beers', 'BeersController');
+// route::get('/test', 'PagesController@index');

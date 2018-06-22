@@ -9,6 +9,6 @@ class PagesController extends Controller
 {
     public function index()
     {
-        Artisan::call('untappd:fetch');
+        return view('home');
     }
 }

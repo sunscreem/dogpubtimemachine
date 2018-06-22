@@ -14,8 +14,8 @@ window.Vue = require('vue');
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
+Vue.component('beer', require('./components/Beer.vue'));
+Vue.component('time-machine', require('./components/TimeMachine.vue'));
 
 
 const bugsnag = require('bugsnag-js');
