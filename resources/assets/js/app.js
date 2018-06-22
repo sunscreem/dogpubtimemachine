@@ -17,6 +17,19 @@ window.Vue = require('vue');
 
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 
+
+const bugsnag = require('bugsnag-js');
+const bugsnagClient = bugsnag({
+    apiKey: '4d09d16b6b67a9f95de6eb75fffe2125',
+    releaseStage: window.releaseStage,
+    notifyReleaseStages: ['production']
+});
+
+const bugsnagVue = require('bugsnag-vue');
+
+bugsnagClient.use(bugsnagVue(Vue));
+
 const app = new Vue({
     el: '#app'
 });
+
