@@ -24,7 +24,8 @@
             <p>Indeed - this is an open source project. The to-do list and known bugs are <a href="https://github.com/sunscreem/dogpubtimemachine/issues">right here</a>.</p>
             <h4>The beers/pubs look wrong? Whats going on?</h4>
             <p>To say this was thrown together in an afternoon would be very accurate. Bear with me... it will get better. Hopefully.</p>
-
+            <h4>Did this take you long?</h4>
+            <p>A day. I woke up and thought .. screw it .. lets just get it done. If you like it too .. well.. you can always <a href="https://buyrobabeer.com">buyrobabeer.com</a>.</p>
         </div>
     </div>
     
