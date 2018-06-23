@@ -45,10 +45,25 @@ class FetchBrewdogBeers extends Command
         $barToUpdate = Bar::orderBy('updated_at')->first();
 
         $crawler = Goutte::request('GET', $barToUpdate->url);
+        
+        // check for content
+        if (!$crawler->filter('.onTap span + span')->count()) {
+
+
+            // bar isn't giving us data
+            
+            $barToUpdate->update(['tap_list_last_updated' => null]);
+
+            return;
+
+        }
+
+        // dump($barToUpdate->name,$barToUpdate->url,$crawler->filter('.onTap span + span')->count()); //debug
 
         $tapListLastUpdated = $this->sortOutTheLastUpdatedTime($crawler->filter('.onTap span + span')->text());
 
         $onTapBeers = [];
+
 
         $crawler->filter('.onTapInfo ul.beer')->each(function ($node) use (&$onTapBeers) {
             $onTapBeers[] = explode("\t", $node->text());
