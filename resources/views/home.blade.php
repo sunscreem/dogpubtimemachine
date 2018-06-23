@@ -14,7 +14,7 @@
         <div class="card-body">
             <h4>What Is This?</h4>
             <p>The idea is to be able to show you what beers are currently available in which brewdog bars.</p> 
-            <p>Hopefull this will lead to showing some cool stats.</p>
+            <p>Hopefully this will lead to showing some cool stats.</p>
             <h4>Who is making this crap?</h4>
             <p>That will be me - <a href="https://twitter.com/sunscreem">Robert Cooper</a> - the bloke from the podcast. Anything you want to talk about - email me <a href="mailto:sunscreem@gmail.com">sunscreem@gmail.com</a></a></p>
             <h4>Why is called a "Time Machine?"</h4>
