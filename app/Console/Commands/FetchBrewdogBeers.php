@@ -45,37 +45,63 @@ class FetchBrewdogBeers extends Command
         $barToUpdate = Bar::orderBy('updated_at')->first();
 
         $crawler = Goutte::request('GET', $barToUpdate->url);
-        
+
+        $this->info('Fetching bar menus for ' . $barToUpdate->name);
+
         // check for content
         if (!$crawler->filter('.onTap span + span')->count()) {
-
-
             // bar isn't giving us data
-            
+
             $barToUpdate->update(['tap_list_last_updated' => null]);
 
-            return;
+            $barToUpdate->touch();
 
+            $this->error('Something went wrong - No data found for this bar!');
+
+            return;
         }
 
         // dump($barToUpdate->name,$barToUpdate->url,$crawler->filter('.onTap span + span')->count()); //debug
+        // dump($barToUpdate->name);
 
         $tapListLastUpdated = $this->sortOutTheLastUpdatedTime($crawler->filter('.onTap span + span')->text());
 
         $onTapBeers = [];
 
+        $crawler->filter('.onTapInfo .category')->each(function ($category) use (&$onTapBeers) {
+            $categoryTitle = strtolower($category->filter('.title')->text());
 
-        $crawler->filter('.onTapInfo ul.beer')->each(function ($node) use (&$onTapBeers) {
-            $onTapBeers[] = explode("\t", $node->text());
+            $this->line('Category Found: ' . $categoryTitle);
+            // dump($categoryTitle); // debug
+
+            if (strpos($categoryTitle, 'bottle') !== false) {
+                $this->line(' - contains \'bottle\'- skipped');
+                return;
+            }
+
+            if (strpos($categoryTitle, 'can') !== false) {
+                $this->line(' - contains \'can\'- skipped');
+                return;
+            }
+
+            $category->filter('ul.beer')->each(function ($node) use (&$onTapBeers) {
+                $onTapBeers[] = explode("\t", $node->text());
+            });
         });
+
+        $this->line(count($onTapBeers) . ' beers found in total');
 
         $thisBarsBeerIds = collect($onTapBeers)->map(function ($beer) {
             return $this->fetchOrCreateBeerID($beer);
         });
 
+        $this->line('Tap list reporting as being last updated: ' . $tapListLastUpdated->diffForHumans());
+
         $barToUpdate->update(['tap_list_last_updated' => $tapListLastUpdated]);
 
-        $barToUpdate->beers()->sync($thisBarsBeerIds);
+        $result = $barToUpdate->beers()->sync($thisBarsBeerIds);
+
+        $this->info('All done. (' . count($result['attached']) . ' Added, ' . count($result['detached']) . ' Detached, ' . count($result['updated']) . ' Updated)');
     }
 
     private function fetchOrCreateBeerID($tapBeer)
