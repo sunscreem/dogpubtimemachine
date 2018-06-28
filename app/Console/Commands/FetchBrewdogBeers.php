@@ -85,7 +85,11 @@ class FetchBrewdogBeers extends Command
             }
 
             $category->filter('ul.beer')->each(function ($node) use (&$onTapBeers) {
-                $onTapBeers[] = explode("\t", $node->text());
+                $thisBeer = [];
+                $node->children()->each(function ($li) use (&$thisBeer) {
+                    $thisBeer[] = $li->text();
+                });
+                $onTapBeers[] = $thisBeer; //explode("\t", $node->text());
             });
         });
 
