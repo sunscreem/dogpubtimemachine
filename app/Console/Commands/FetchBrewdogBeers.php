@@ -74,15 +74,15 @@ class FetchBrewdogBeers extends Command
             $this->line('Category Found: ' . $categoryTitle);
             // dump($categoryTitle); // debug
 
-            if (strpos($categoryTitle, 'bottle') !== false) {
-                $this->line(' - contains \'bottle\'- skipped');
+            if (str_contains($categoryTitle, config('site.categoryWordsToSkip'))) {
+                $this->line(' - contains a word from the skip list - skipped');
                 return;
             }
 
-            if (strpos($categoryTitle, 'can') !== false) {
-                $this->line(' - contains \'can\'- skipped');
-                return;
-            }
+            // if (strpos($categoryTitle, 'can') !== false) {
+            //     $this->line(' - contains \'can\'- skipped');
+            //     return;
+            // }
 
             $category->filter('ul.beer')->each(function ($node) use (&$onTapBeers) {
                 $thisBeer = [];
