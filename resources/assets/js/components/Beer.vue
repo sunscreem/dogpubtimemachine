@@ -17,7 +17,7 @@
         methods: {
 
             showBars(){
-                this.$emit('showBars',this.beer);
+                this.$emit('showBars',this.beer, true);
             }
         }
 
