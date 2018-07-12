@@ -19,7 +19,7 @@
                     <div class="card-header">{{ barsHeaderText }}</div>
                     <div class="card-body bars">
                         <div v-for="bar in bars">
-                            {{ bar.name }}
+                            <bar :bar="bar"></bar>
                         </div>
                     </div>
                 </div>

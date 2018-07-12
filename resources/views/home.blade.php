@@ -12,6 +12,7 @@
             Here's some info.
         </div>
         <div class="card-body">
+            <a href="https://github.com/sunscreem/dogpubtimemachine"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
             <h4>What Is This?</h4>
             <p>The idea is to be able to show you what beers are currently available in which brewdog bars.</p> 
             <p>Hopefully this will lead to showing some cool stats.</p>

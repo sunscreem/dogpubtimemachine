@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "bugsnag-js": "^4.7.2",
-    "bugsnag-vue": "^1.0.1"
+    "bugsnag-vue": "^1.0.1",
+    "v-tooltip": "^2.0.0-rc.33"
   }
 }
