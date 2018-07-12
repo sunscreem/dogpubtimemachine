@@ -16,4 +16,6 @@ Route::get('/', 'PagesController@index')->name('home');
 Route::get('/bar-has-beer/{beer}', 'BarController@hasBeer')->name('bars.hasBeer');
 
 Route::resource('beers', 'BeersController');
+
+Route::get('/system-status', 'SystemStatusController@index')->name('system.status');
 // route::get('/test', 'PagesController@index');
