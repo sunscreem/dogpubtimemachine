@@ -1687,7 +1687,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         showBars: function showBars() {
-            this.$emit('showBars', this.beer);
+            this.$emit('showBars', this.beer, true);
         }
     }
 
@@ -1795,6 +1795,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
   mounted: function mounted() {
     this.fetchTheBeers();
+    if (this.beerSelected.id > 0) {
+      this.getBarsForBeer(this.beerSelected);
+    }
+    window.onpopstate = function (event) {
+      if (event.state && event.state.id > 0) {
+        this.getBarsForBeer(event.state, false);
+      }
+    }.bind(this);
   },
 
 
@@ -1813,13 +1821,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         });
       });
     },
-    getBarsForBeer: function getBarsForBeer(beer) {
+    getBarsForBeer: function getBarsForBeer(beer, updateUrl) {
       var _this2 = this;
 
+      updateUrl = updateUrl || false;
       this.barsHeaderText = 'Loading...';
       axios.get(route('bars.hasBeer', beer.id)).then(function (response) {
         _this2.bars = response.data;
         _this2.barsHeaderText = beer.name + ' by ' + beer.brewery + ' on tap in ' + _this2.bars.length + ' Brewdog bar' + (_this2.bars.length !== 1 ? 's' : '') + ':';
+        if (updateUrl) {
+          history.pushState(beer, beer.name, beer.id);
+        }
       }).catch(function (error) {
         _this2.$swal({
           text: error.response.statusText,
@@ -1828,6 +1840,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         });
       });
     }
+  },
+
+  props: {
+    'beerSelected': Object
   }
 
 });
@@ -61881,7 +61897,6 @@ module.exports = function(module) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_sweetalert2__ = __webpack_require__("./node_modules/vue-sweetalert2/src/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_v_tooltip__ = __webpack_require__("./node_modules/v-tooltip/dist/v-tooltip.esm.js");
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when

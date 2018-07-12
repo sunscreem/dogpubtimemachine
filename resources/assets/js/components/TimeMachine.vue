@@ -47,6 +47,14 @@
 
     mounted() {
       this.fetchTheBeers();
+      if (this.beerSelected.id > 0) {
+        this.getBarsForBeer(this.beerSelected)
+      }
+      window.onpopstate = function(event) {
+        if (event.state && event.state.id > 0) {
+          this.getBarsForBeer(event.state, false);
+        }
+      }.bind(this);
     },
 
     methods: {
@@ -66,11 +74,15 @@
           });
       },
 
-      getBarsForBeer(beer) {
+      getBarsForBeer(beer, updateUrl) {
+        updateUrl = updateUrl || false;
         this.barsHeaderText = 'Loading...';
         axios.get(route('bars.hasBeer', beer.id)).then((response) => {
           this.bars = response.data;
-          this.barsHeaderText = beer.name + ' by ' + beer.brewery + ' on tap in ' + this.bars.length + ' Brewdog bar' + (this.bars.length !== 1 ? 's' : '') + ':'
+          this.barsHeaderText = beer.name + ' by ' + beer.brewery + ' on tap in ' + this.bars.length + ' Brewdog bar' + (this.bars.length !== 1 ? 's' : '') + ':';
+          if (updateUrl) {
+            history.pushState(beer, beer.name, beer.id);
+          }
         })
           .catch(error => {
             this.$swal({
@@ -81,6 +93,10 @@
           });
 
       }
+    },
+
+    props: {
+      'beerSelected': Object
     }
 
   }
