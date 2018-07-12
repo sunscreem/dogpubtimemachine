@@ -1646,14 +1646,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    data: function data() {
-        return {
-            tooltip: 'Last Checked: ' + this.bar.lastChecked + '<br>' + 'Tap List Updated: ' + this.bar.tapListLastUpdated
-        };
-    },
+  data: function data() {
+    return {};
+  },
 
 
-    props: ['bar']
+  computed: {
+    tooltip: function tooltip() {
+      var tip = 'Last Checked: ' + this.bar.lastChecked + '<br>';
+      tip += 'Tap List Updated: ' + this.bar.tapListLastUpdated;
+      return tip;
+    }
+  },
+
+  props: ['bar']
 });
 
 /***/ }),
@@ -1681,7 +1687,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         showBars: function showBars() {
-            this.$emit('showBars', this.beer);
+            this.$emit('showBars', this.beer, true);
         }
     }
 
@@ -1777,48 +1783,68 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    data: function data() {
-        return {
-            beerHeaderText: 'Loading...',
-            barsHeaderText: 'Choose A Beer',
-            beers: [],
-            bars: []
-        };
-    },
-    mounted: function mounted() {
-        this.fetchTheBeers();
-    },
-
-    methods: {
-        fetchTheBeers: function fetchTheBeers() {
-            var _this = this;
-
-            axios.get(route('beers.index')).then(function (response) {
-                _this.beers = response.data;
-                _this.beerHeaderText = 'There are ' + _this.beers.length + ' beers on tap. Click on a beer...';
-            }).catch(function (error) {
-                _this.$swal({ text: error.response.statusText,
-                    title: 'Something went wrong!',
-                    type: 'error' });
-            });
-        },
-        getBarsForBeer: function getBarsForBeer(beer) {
-            var _this2 = this;
-
-            this.barsHeaderText = 'Loading...';
-            axios.get(route('bars.hasBeer', beer.id)).then(function (response) {
-                _this2.bars = response.data;
-                _this2.barsHeaderText = beer.name + ' by ' + beer.brewery + ' on tap in ' + _this2.bars.length + ' Brewdog bar' + (_this2.bars.length != 1 ? 's' : '') + ':';
-            }).catch(function (error) {
-                _this2.$swal({ text: error.response.statusText,
-                    title: 'Something went wrong!',
-                    type: 'error' });
-            });
-        }
+  data: function data() {
+    return {
+      beerHeaderText: 'Loading...',
+      barsHeaderText: 'Choose A Beer',
+      beers: [],
+      bars: []
+    };
+  },
+  mounted: function mounted() {
+    this.fetchTheBeers();
+    if (this.beerSelected.id > 0) {
+      this.getBarsForBeer(this.beerSelected);
     }
+    window.onpopstate = function (event) {
+      if (event.state && event.state.id > 0) {
+        this.getBarsForBeer(event.state, false);
+      }
+    }.bind(this);
+  },
+
+
+  methods: {
+    fetchTheBeers: function fetchTheBeers() {
+      var _this = this;
+
+      axios.get(route('beers.index')).then(function (response) {
+        _this.beers = response.data;
+        _this.beerHeaderText = 'There are ' + _this.beers.length + ' beers on tap. Click on a beer...';
+      }).catch(function (error) {
+        _this.$swal({
+          text: error.response.statusText,
+          title: 'Something went wrong!',
+          type: 'error'
+        });
+      });
+    },
+    getBarsForBeer: function getBarsForBeer(beer, updateUrl) {
+      var _this2 = this;
+
+      updateUrl = updateUrl || false;
+      this.barsHeaderText = 'Loading...';
+      axios.get(route('bars.hasBeer', beer.id)).then(function (response) {
+        _this2.bars = response.data;
+        _this2.barsHeaderText = beer.name + ' by ' + beer.brewery + ' on tap in ' + _this2.bars.length + ' Brewdog bar' + (_this2.bars.length !== 1 ? 's' : '') + ':';
+        if (updateUrl) {
+          history.pushState(beer, beer.name, beer.id);
+        }
+      }).catch(function (error) {
+        _this2.$swal({
+          text: error.response.statusText,
+          title: 'Something went wrong!',
+          type: 'error'
+        });
+      });
+    }
+  },
+
+  props: {
+    'beerSelected': Object
+  }
 
 });
 
@@ -50623,7 +50649,69 @@ module.exports = function normalizeComponent (
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-21ef0a13\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/TimeMachine.vue":
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-3f471ce7\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/Beer.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("span", { staticClass: "link", on: { click: _vm.showBars } }, [
+      _vm._v(_vm._s(_vm.beer.nameAndBrewery) + " / " + _vm._s(_vm.totalBars))
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-3f471ce7", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-4a6f81a8\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/Bar.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c(
+      "span",
+      {
+        directives: [
+          {
+            name: "tooltip",
+            rawName: "v-tooltip.right",
+            value: _vm.tooltip,
+            expression: "tooltip",
+            modifiers: { right: true }
+          }
+        ]
+      },
+      [_vm._v(_vm._s(_vm.bar.name))]
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-4a6f81a8", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-559e815a\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/TimeMachine.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -50690,75 +50778,13 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-21ef0a13", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-559e815a", module.exports)
   }
 }
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-2cdd49ec\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/Bar.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", [
-    _c(
-      "span",
-      {
-        directives: [
-          {
-            name: "tooltip",
-            rawName: "v-tooltip.right",
-            value: _vm.tooltip,
-            expression: "tooltip",
-            modifiers: { right: true }
-          }
-        ]
-      },
-      [_vm._v(_vm._s(_vm.bar.name))]
-    )
-  ])
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-2cdd49ec", module.exports)
-  }
-}
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-2fd36a27\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/Beer.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("span", { staticClass: "link", on: { click: _vm.showBars } }, [
-      _vm._v(_vm._s(_vm.beer.nameAndBrewery) + " / " + _vm._s(_vm.totalBars))
-    ])
-  ])
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-2fd36a27", module.exports)
-  }
-}
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-96abcdae\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/Status.vue":
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-9407c82e\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/Status.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -50801,7 +50827,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-96abcdae", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-9407c82e", module.exports)
   }
 }
 
@@ -61871,7 +61897,6 @@ module.exports = function(module) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_sweetalert2__ = __webpack_require__("./node_modules/vue-sweetalert2/src/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_v_tooltip__ = __webpack_require__("./node_modules/v-tooltip/dist/v-tooltip.esm.js");
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -61990,7 +62015,7 @@ var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/comp
 /* script */
 var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/Bar.vue")
 /* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-2cdd49ec\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/Bar.vue")
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-4a6f81a8\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/Bar.vue")
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -62007,7 +62032,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources\\assets\\js\\components\\Bar.vue"
+Component.options.__file = "resources/assets/js/components/Bar.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -62016,9 +62041,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-2cdd49ec", Component.options)
+    hotAPI.createRecord("data-v-4a6f81a8", Component.options)
   } else {
-    hotAPI.reload("data-v-2cdd49ec", Component.options)
+    hotAPI.reload("data-v-4a6f81a8", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -62038,7 +62063,7 @@ var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/comp
 /* script */
 var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/Beer.vue")
 /* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-2fd36a27\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/Beer.vue")
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-3f471ce7\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/Beer.vue")
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -62055,7 +62080,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources\\assets\\js\\components\\Beer.vue"
+Component.options.__file = "resources/assets/js/components/Beer.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -62064,9 +62089,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-2fd36a27", Component.options)
+    hotAPI.createRecord("data-v-3f471ce7", Component.options)
   } else {
-    hotAPI.reload("data-v-2fd36a27", Component.options)
+    hotAPI.reload("data-v-3f471ce7", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -62086,7 +62111,7 @@ var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/comp
 /* script */
 var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/Status.vue")
 /* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-96abcdae\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/Status.vue")
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-9407c82e\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/Status.vue")
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -62103,7 +62128,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources\\assets\\js\\components\\Status.vue"
+Component.options.__file = "resources/assets/js/components/Status.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -62112,9 +62137,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-96abcdae", Component.options)
+    hotAPI.createRecord("data-v-9407c82e", Component.options)
   } else {
-    hotAPI.reload("data-v-96abcdae", Component.options)
+    hotAPI.reload("data-v-9407c82e", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -62134,7 +62159,7 @@ var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/comp
 /* script */
 var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/TimeMachine.vue")
 /* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-21ef0a13\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/TimeMachine.vue")
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-559e815a\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/TimeMachine.vue")
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -62151,7 +62176,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources\\assets\\js\\components\\TimeMachine.vue"
+Component.options.__file = "resources/assets/js/components/TimeMachine.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -62160,9 +62185,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-21ef0a13", Component.options)
+    hotAPI.createRecord("data-v-559e815a", Component.options)
   } else {
-    hotAPI.reload("data-v-21ef0a13", Component.options)
+    hotAPI.reload("data-v-559e815a", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true

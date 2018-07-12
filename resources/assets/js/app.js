@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -32,9 +31,9 @@ require('es6-promise').polyfill();
 
 const bugsnag = require('bugsnag-js');
 const bugsnagClient = bugsnag({
-    apiKey: '4d09d16b6b67a9f95de6eb75fffe2125',
-    releaseStage: window.releaseStage,
-    notifyReleaseStages: ['production']
+  apiKey: '4d09d16b6b67a9f95de6eb75fffe2125',
+  releaseStage: window.releaseStage,
+  notifyReleaseStages: ['production']
 });
 
 const bugsnagVue = require('bugsnag-vue');
@@ -42,6 +41,6 @@ const bugsnagVue = require('bugsnag-vue');
 bugsnagClient.use(bugsnagVue(Vue));
 
 const app = new Vue({
-    el: '#app'
+  el: '#app',
 });
 
