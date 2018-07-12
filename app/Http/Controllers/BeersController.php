@@ -14,9 +14,10 @@ class BeersController extends Controller
      */
     public function index()
     {
-        // return Beer::take(10)->get();
-        // dd(Beer::first());
-         return Beer::all()->sortByDesc('totalBars')->values(); //->groupBy('nameAndBrewery'));
+        // dd(Beer::all());
+        return Beer::all()->filter(function ($value) { return $value->totalBars; })
+                            ->sortByDesc('totalBars')
+                            ->values();
     }
 
     /**
