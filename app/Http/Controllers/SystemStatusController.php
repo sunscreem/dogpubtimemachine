@@ -23,6 +23,10 @@ class SystemStatusController extends Controller
 
         $barsNotShowingTapLists = join(', ', $barsNotShowingTapLists);
 
+        if (!$barsNotShowingTapLists) {
+            $barsNotShowingTapLists = '-';
+        }
+
         return compact(
                         'totalBrewdogBars',
                         'lastBarChecked',
