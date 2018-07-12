@@ -10526,3 +10526,7 @@ a.text-dark:focus {
   overflow-y: auto;
 }
 
+.bars span.has-tooltip {
+  cursor: help;
+}
+
