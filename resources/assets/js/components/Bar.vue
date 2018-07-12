@@ -17,7 +17,7 @@
                 tip += 'Tap List Updated: '+ this.bar.tapListLastUpdated; 
                 return tip;
             }
-        }
+        },
         
         props: ['bar']
     }
