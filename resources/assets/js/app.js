@@ -17,6 +17,7 @@ window.Vue = require('vue');
 Vue.component('beer', require('./components/Beer.vue'));
 Vue.component('time-machine', require('./components/TimeMachine.vue'));
 
+require('es6-promise').polyfill();
 
 const bugsnag = require('bugsnag-js');
 const bugsnagClient = bugsnag({
