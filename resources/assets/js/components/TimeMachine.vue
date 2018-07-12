@@ -48,7 +48,7 @@
     mounted() {
       this.fetchTheBeers();
       if (this.beerSelected.id > 0) {
-        this.getBarsForBeer(this.beerSelected)
+        this.getBarsForBeer(this.beerSelected,false)
       }
       window.onpopstate = function(event) {
         if (event.state && event.state.id > 0) {
@@ -74,8 +74,7 @@
           });
       },
 
-      getBarsForBeer(beer, updateUrl) {
-        updateUrl = updateUrl || false;
+      getBarsForBeer(beer, updateUrl = true) {
         this.barsHeaderText = 'Loading...';
         axios.get(route('bars.hasBeer', beer.id)).then((response) => {
           this.bars = response.data;
