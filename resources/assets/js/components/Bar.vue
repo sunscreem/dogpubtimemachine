@@ -1,11 +1,11 @@
 <template>
-    <div>
-          <span v-tooltip.right="tooltip">{{ bar.name }}</span>
-    </div>
+  <div>
+    <span v-tooltip.right="tooltip">{{ bar.name }}</span>
+  </div>
 </template>
 
 <script>
-    export default {
+  export default {
 
         data(){
             return {
