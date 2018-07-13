@@ -11,3 +11,7 @@ before_script:
 script:
   - php artisan key:generate
   - vendor/bin/phpunit
+
+after_success:
+- chmod +x ./tests.sh; ./tests.sh
+
