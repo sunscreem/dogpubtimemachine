@@ -12,6 +12,9 @@ script:
   - php artisan key:generate
   - vendor/bin/phpunit
 
-after_success:
-- chmod +x ./tests.sh; ./tests.sh
+deploy:
+  provider: script
+  script: bash deploy.sh
+  on:
+    branch: develop
 
