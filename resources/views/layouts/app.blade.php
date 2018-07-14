@@ -9,6 +9,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    @routes
     <title>{{ config('app.name', 'Laravel') }}</title>
     <script> window.releaseStage = "{{ env('APP_ENV') }}";</script>
     <!-- Scripts -->
@@ -17,7 +18,6 @@
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 
-    @routes
 </head>
 <body>
     <div id="app">
