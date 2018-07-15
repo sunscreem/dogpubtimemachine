@@ -19,4 +19,4 @@ Route::resource('beers', 'BeersController');
 
 Route::get('/system-status', 'SystemStatusController@index')->name('system.status');
 // route::get('/test', 'PagesController@index');
-Route::get('/{id}', 'PagesController@beerSelected')->name('beerSelected');
+// Route::get('/{id}', 'PagesController@beerSelected')->name('beerSelected');

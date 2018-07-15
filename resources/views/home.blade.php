@@ -7,7 +7,7 @@
     <h5 class="text-center mb-4">Right now there are {{ $totalBeers }} beers on tap across {{ $totalBars }} Brewdog bars!</h5>
     
 
-    <time-machine v-bind:beer-selected='{!! $beerSelected ?? "{id:0}" !!}'></time-machine>
+    <time-machine></time-machine>
 
     <div class="card">
         <div class="card-header">
