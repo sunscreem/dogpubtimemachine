@@ -29,7 +29,7 @@
                     this.stats = response.data;
                 })
                 .catch(error => {
-                    this.$swal({text: error.response.statusText,
+                    this.$swal({text: (error.response ? error.response.statusText : 'Are you offline?'),
                                 title: 'Something went wrong!',
                                 type: 'error'});
                 });
