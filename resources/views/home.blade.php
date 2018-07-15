@@ -3,7 +3,9 @@
 @section('content')
 
 <div class="container">
-    <h1 class="text-center mt-3 mb-4">Dog Pub Time Machine</h1>
+    <h1 class="text-center mt-3 ">Dog Pub Time Machine</h1>
+    <h5 class="text-center mb-4">Right now there are {{ $totalBeers }} beers on tap across {{ $totalBars }} Brewdog bars!</h5>
+    
 
     <time-machine v-bind:beer-selected='{!! $beerSelected ?? "{id:0}" !!}'></time-machine>
 

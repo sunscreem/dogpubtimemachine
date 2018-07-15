@@ -2,21 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Bar;
 use App\Beer;
 use Artisan;
 use Illuminate\Http\Request;
 
 class PagesController extends Controller
 {
-  public function index()
-  {
-    return view('home');
-  }
+    public function index()
+    {
+        $totalBars = Bar::count();
 
-  public function beerSelected($id)
-  {
-    $beerSelected      = Beer::findOrFail($id);
+        $totalBeers = Beer::all()->filter(function ($value) { return $value->totalBars; })->count();
 
-    return view('home', compact('beerSelected'));
-  }
+        return view('home', compact('totalBeers', 'totalBars'));
+    }
+
+    public function beerSelected($id)
+    {
+        $beerSelected = Beer::findOrFail($id);
+
+        return view('home', compact('beerSelected'));
+    }
 }
