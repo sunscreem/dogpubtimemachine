@@ -2,7 +2,7 @@
   <div>
     <div class="row ">
       <div class="col-md-6 mb-4">
-        <div class="card">
+        <div class="card shadow">
           <div class="card-header">{{ beerHeaderText }}</div>
           <div class="card-body beers">
             <div v-if="beers.length">
@@ -15,7 +15,7 @@
         </div>
       </div>
       <div class="col-md-6 mb-4">
-        <div class="card">
+        <div class="card shadow">
           <div class="card-header">{{ barsHeaderText }}</div>
           <div class="card-body bars">
             <div v-for="bar in bars">
