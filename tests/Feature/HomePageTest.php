@@ -11,6 +11,6 @@ class HomePageTest extends TestCase
     public function the_homepage_loads_correctly()
     {
         $this->get('/')
-            ->assertSee('Dog Pub');
+             ->assertSee('Dog Pub Time Machine');
     }
 }
