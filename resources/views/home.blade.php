@@ -9,7 +9,7 @@
 
     <time-machine></time-machine>
 
-    <div class="card">
+    <div class="card shadow">
         <div class="card-header">
             What on earth IS THIS?!
         </div>

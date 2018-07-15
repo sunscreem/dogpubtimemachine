@@ -5,15 +5,12 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ExampleTest extends TestCase
+class HomePageTest extends TestCase
 {
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function testBasicTest()
+    /** @test */
+    public function the_homepage_loads_correctly()
     {
-        $this->assertTrue(true);
+        $this->get('/')
+             ->assertSee('Dog Pub Time Machine');
     }
 }

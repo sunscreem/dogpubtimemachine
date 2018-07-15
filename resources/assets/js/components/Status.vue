@@ -1,5 +1,5 @@
 <template>
-    <div class="card">
+    <div class="card shadow">
         <div class="card-header">System Status</div>
         <div class="card-body">
             Total Brewdog Bars: {{ stats.totalBrewdogBars }}<br>
