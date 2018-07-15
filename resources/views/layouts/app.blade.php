@@ -7,5 +7,6 @@
     <div id="app">
          @yield('content')
     </div>
+     @include('layouts.partials.footer')
 </body>
 </html>
