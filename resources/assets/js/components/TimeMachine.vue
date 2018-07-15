@@ -10,7 +10,7 @@
                 <beer :beer="beer" @showBars="getBarsForBeer"></beer>
               </div>
             </div>
-            <div v-else class="text-center pt-5"><img src="/img/spinner.gif"></div>
+            <div v-else class="text-center pt-5"><img src="/images/spinner.gif"></div>
           </div>
         </div>
       </div>

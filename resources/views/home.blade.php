@@ -4,7 +4,7 @@
 
 <div class="container">
     <h1 class="text-center mt-3 ">Dog Pub Time Machine</h1>
-    <h5 class="text-center mb-4">Right now there are {{ $totalBeers }} beers on tap across {{ $totalBars }} Brewdog bars!</h5>
+    <h6 class="text-center mb-4">Right now there are {{ $totalBeers }} beers on tap across {{ $totalBars }} Brewdog bars!</h6>
     
 
     <time-machine></time-machine>
