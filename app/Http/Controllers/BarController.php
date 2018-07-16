@@ -9,7 +9,7 @@ class BarController extends Controller
 {
     public function hasBeer(Beer $beer)
     {
-        return $beer->bars()->get()->map(function ($bar) {
+        return $beer->bars()->orderBy('name')->get()->map(function ($bar) {
             $lastChecked = ($bar->updated_at ? $bar->updated_at->diffForHumans() : '-');
             $tapListLastUpdate = ($bar->tap_list_last_updated ? $bar->tap_list_last_updated->diffForHumans() : '-');
 
