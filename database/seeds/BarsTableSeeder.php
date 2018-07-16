@@ -68,5 +68,7 @@ class BarsTableSeeder extends Seeder
         Bar::create(['name' => 'São Paulo', 'territory' => 'International', 'url' => 'https://www.brewdog.com/ajax/tap_list.php?id=5779']);
         Bar::create(['name' => 'Södermalm', 'territory' => 'International', 'url' => 'https://www.brewdog.com/ajax/tap_list.php?id=7487']);
         Bar::create(['name' => 'Tallinn', 'territory' => 'International', 'url' => 'https://www.brewdog.com/ajax/tap_list.php?id=8941']);
+
+        Bar::create(['name' => 'Norrköping', 'territory' => 'International', 'url' => 'https://www.brewdog.com/ajax/tap_list.php?id=10037']);
     }
 }
