@@ -11,7 +11,7 @@
 
     <div class="card shadow">
         <div class="card-header">
-            What on earth IS THIS?!
+            What on earth is this?!
         </div>
         <div class="card-body">
         <p>If you are wondering what this is, who made it and why then you are in luck:</p>
