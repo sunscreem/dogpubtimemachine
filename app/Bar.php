@@ -5,10 +5,18 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Ramsey\Uuid\Uuid;
 use App\Events\BarCreated;
+use Illuminate\Support\Collection;
+use App\Events\AttachBeerToBar;
+use App\Events\RemoveBeerFromBar;
 
 class Bar extends Model
 {
     protected $guarded = [];
+
+    public function beers()
+    {
+        return $this->belongsToMany(\App\Beer::class);
+    }
 
     public static function createWithAttributes(array $attributes): Bar
     {
@@ -26,6 +34,32 @@ class Bar extends Model
          * The uuid will be used the retrieve the created account.
          */
         return static::uuid($attributes['uuid']);
+    }
+
+    public function syncBeers(Collection $beers): array
+    {
+        $beers = $beers->toArray();
+        $current = array_keys($this->beers->toArray());
+
+        // first lets see what needs attached
+        $toBeAttached = collect(array_diff($beers, $current));
+
+        // now lets see what needs detached
+        $toBeDetached = collect(array_diff($current, $beers));
+
+        $toBeAttached->each(function ($beerId) {
+            event(new AttachBeerToBar(['beer_id' => $beerId,
+                                        'bar_id' => $this->id,
+                                        'uuid' => (string) Uuid::uuid4()]));
+        });
+
+        $toBeDetached->each(function ($beerId) {
+            event(new RemoveBeerFromBar(['beer_id' => $beerId,
+                                        'bar_id' => $this->id]));
+        });
+
+        return ['attached' => $toBeAttached,
+                'detached' => $toBeDetached];
     }
 
     /*

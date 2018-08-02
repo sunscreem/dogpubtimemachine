@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Spatie\EventProjector\Facades\Projectionist;
 use App\Projectors\BarsProjector;
+use App\Projectors\BeersProjector;
+use App\Projectors\BarsBeersProjector;
 
 class EventProjectorServiceProvider extends ServiceProvider
 {
@@ -15,8 +17,8 @@ class EventProjectorServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        Projectionist::addProjectors([
-                                BarsProjector::class
-                                    ]);
+        Projectionist::addProjectors([BarsProjector::class,
+                                        BeersProjector::class,
+                                        BarsBeersProjector::class]);
     }
 }
