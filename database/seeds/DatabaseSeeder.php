@@ -11,9 +11,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(BarsTableSeeder::class);
-        $this->call(BarsTableWebsiteColumnsUpdaterSeeder::class);
-        $this->call(AddMKSeeder::class);
+        $this->call(BarsSeeder::class);
+        // $this->call(BarsTableWebsiteColumnsUpdaterSeeder::class);
+        // $this->call(AddMKSeeder::class);
         //$this->call(AddDoghouseSeeder::class);
     }
 }

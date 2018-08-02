@@ -4,52 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "99c2da0a681638e230117e44c7c363e7",
+    "content-hash": "2d6b4e3a50c9465e3c3d02deb4c4e23c",
     "packages": [
-        {
-            "name": "ahuggins/open-on-make",
-            "version": "0.0.16",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ahuggins/open-on-make.git",
-                "reference": "bcd35e9fdc6ab05555bfb84b568063c4be81e33e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ahuggins/open-on-make/zipball/bcd35e9fdc6ab05555bfb84b568063c4be81e33e",
-                "reference": "bcd35e9fdc6ab05555bfb84b568063c4be81e33e",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/support": "~5.5.0|~5.6.0",
-                "php": "~7.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "OpenOnMake\\Providers\\OpenOnMakeServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "OpenOnMake\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Andrew Huggins",
-                    "email": "andrewhuggins@gmail.com"
-                }
-            ],
-            "description": "Automatically open files in editor when Artisan make:* is executed",
-            "time": "2018-06-18T21:47:15+00:00"
-        },
         {
             "name": "beyondcode/laravel-self-diagnosis",
             "version": "0.3.0",
@@ -3459,6 +3415,51 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "ahuggins/open-on-make",
+            "version": "0.0.20",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ahuggins/open-on-make.git",
+                "reference": "88524e93f3b3cbb9ec586e0181008804cfd2bd4d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ahuggins/open-on-make/zipball/88524e93f3b3cbb9ec586e0181008804cfd2bd4d",
+                "reference": "88524e93f3b3cbb9ec586e0181008804cfd2bd4d",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "~5.5.0|~5.6.0",
+                "php": "~7.0",
+                "symfony/finder": "~3.3|^4.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "OpenOnMake\\Providers\\OpenOnMakeServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "OpenOnMake\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andrew Huggins",
+                    "email": "andrewhuggins@gmail.com"
+                }
+            ],
+            "description": "Automatically open files in editor when Artisan make:* is executed",
+            "time": "2018-07-31T20:47:26+00:00"
+        },
         {
             "name": "doctrine/instantiator",
             "version": "1.1.0",
