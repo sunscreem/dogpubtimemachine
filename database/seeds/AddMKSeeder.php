@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\Bar;
 
-class AddDoghouseSeeder extends Seeder
+class AddMKSeeder extends Seeder
 {
     /**
      * Run the database seeds.
