@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(BarsTableSeeder::class);
         $this->call(BarsTableWebsiteColumnsUpdaterSeeder::class);
+        $this->call(AddMKSeeder::class);
         //$this->call(AddDoghouseSeeder::class);
     }
 }
