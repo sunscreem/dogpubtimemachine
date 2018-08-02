@@ -9,7 +9,7 @@
 @include('layouts.partials.favicons')
 @routes
 <title>{{ config('app.name', 'Laravel') }}</title>
-<script> window.releaseStage = "{{ config('env') }}";</script>
+<script> window.releaseStage = "{{ config('app.env') }}";</script>
 <!-- Scripts -->
 <script src="{{ mix('js/app.js') }}" defer></script>
 
