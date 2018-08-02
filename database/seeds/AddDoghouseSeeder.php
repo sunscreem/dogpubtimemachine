@@ -10,14 +10,13 @@ class AddDoghouseSeeder extends Seeder
    *
    * @return void
    */
-  public function run()
-  {
-    Bar::create([
+    public function run()
+    {
+        Bar::create([
         'name'                     => 'Doghouse',
         'territory'                => 'USA',
         'url'                      => null,
         'brewdog_site_listing_url' => 'https://www.brewdog.com/bars/usa/doghouse',
-    ]);
-
-  }
+        ]);
+    }
 }

@@ -12,6 +12,6 @@ class Bar extends Model
 
     public function beers()
     {
-        return $this->belongsToMany('App\Beer');
+        return $this->belongsToMany(\App\Beer::class);
     }
 }

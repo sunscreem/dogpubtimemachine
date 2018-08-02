@@ -13,7 +13,9 @@ class PagesController extends Controller
     {
         $totalBars = Bar::count();
 
-        $totalBeers = Beer::all()->filter(function ($value) { return $value->totalBars; })->count();
+        $totalBeers = Beer::all()->filter(function ($value) {
+            return $value->totalBars;
+        })->count();
 
         return view('home', compact('totalBeers', 'totalBars'));
     }

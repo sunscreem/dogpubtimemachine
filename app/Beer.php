@@ -12,7 +12,7 @@ class Beer extends Model
 
     public function bars()
     {
-        return $this->belongsToMany('App\Bar');
+        return $this->belongsToMany(\App\Bar::class);
     }
 
     public function getNameAndBreweryAttribute()

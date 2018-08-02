@@ -27,11 +27,11 @@ class SystemStatusController extends Controller
             $barsNotShowingTapLists = '-';
         }
         return compact(
-                        'totalBrewdogBars',
-                        'lastBarChecked',
-                        'totalBarsCheckedInTwoHours',
-                        'totalBarUpdatedTapListInLastThreeDays',
-                        'barsNotShowingTapLists'
+            'totalBrewdogBars',
+            'lastBarChecked',
+            'totalBarsCheckedInTwoHours',
+            'totalBarUpdatedTapListInLastThreeDays',
+            'barsNotShowingTapLists'
         );
     }
 }
