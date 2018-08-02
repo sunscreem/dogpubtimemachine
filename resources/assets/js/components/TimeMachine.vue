@@ -14,10 +14,10 @@
           </div>
         </div>
       </div>
-      <div class="col-md-6 mb-4">
+      <div class="col-md-6 mb-4" id="bars">
         <div class="card shadow">
           <div class="card-header">{{ barsHeaderText }}</div>
-          <div class="card-body bars">
+          <div class="card-body bars" >
             <div v-for="bar in bars">
               <bar :bar="bar"></bar>
             </div>
@@ -79,6 +79,7 @@
         axios.get(route('bars.hasBeer', beer.id)).then((response) => {
           this.bars = response.data;
           this.barsHeaderText = beer.name + ' by ' + beer.brewery + ' on tap in ' + this.bars.length + ' Brewdog bar' + (this.bars.length !== 1 ? 's' : '') + ':';
+          document.getElementById("bars").scrollIntoView({behavior:'smooth'});
           // if (updateUrl) {
           //   history.pushState(beer, beer.name, beer.id);
           // }

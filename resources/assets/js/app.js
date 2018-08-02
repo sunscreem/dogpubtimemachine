@@ -16,6 +16,10 @@ import VTooltip from 'v-tooltip';
 
 Vue.use(VTooltip);
 
+import smoothscroll from 'smoothscroll-polyfill';
+
+smoothscroll.polyfill();
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -44,3 +48,10 @@ const app = new Vue({
   el: '#app',
 });
 
+
+function scrollIntoView(eleID) {
+  var e = document.getElementById(eleID);
+  if (!!e && e.scrollIntoView) {
+    e.scrollIntoView({behavior: 'smooth' });
+  }
+}
