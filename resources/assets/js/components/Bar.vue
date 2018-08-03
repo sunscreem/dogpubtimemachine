@@ -1,6 +1,6 @@
 <template>
   <div>
-    <span v-tooltip.right="tooltip">{{ bar.name }}</span>
+    <a v-tooltip.right="tooltip">{{ bar.name }}</a>
   </div>
 </template>
 
