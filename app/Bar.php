@@ -43,10 +43,10 @@ class Bar extends Model
         $beers = $beers->toArray();
         $current = $this->beers->pluck('id')->toArray();
 
-        $toBeAttached = collect(array_diff($beers, $current));
+        $toBeAttached = collect(array_diff($beers, $current))->unique(); //unique as sometimes bars accidentally have a beer on twice
 
-        $toBeDetached = collect(array_diff($current, $beers));
-        // dd($beers, $current);
+        $toBeDetached = collect(array_diff($current, $beers))->unique();
+
         $toBeAttached->each(function ($beerId) {
             event(new BeerAttachedToBar(['beer_id' => $beerId,
                                         'bar_id' => $this->id,

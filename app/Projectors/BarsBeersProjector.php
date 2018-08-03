@@ -22,7 +22,6 @@ class BarsBeersProjector implements Projector
 
     public function onBeerAttachedToBar(BeerAttachedToBar $event)
     {
-        // dump($event->attributes);
         Bar::find($event->attributes['bar_id'])
             ->beers()
             ->attach($event->attributes['beer_id'], ['uuid' => $event->attributes['uuid']]);
@@ -30,7 +29,6 @@ class BarsBeersProjector implements Projector
 
     public function onBeerRemovedFromBar(BeerDetachedFromBar $event)
     {
-        // dump($event->attributes);
         Bar::find($event->attributes['bar_id'])
             ->beers()
             ->detach($event->attributes['beer_id']);
