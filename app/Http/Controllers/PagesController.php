@@ -17,13 +17,13 @@ class PagesController extends Controller
             return $value->totalBars;
         })->count();
 
-        return view('home', compact('totalBeers', 'totalBars'));
+        return view('homepage', compact('totalBeers', 'totalBars'));
     }
 
     public function beerSelected($id)
     {
         $beerSelected = Beer::findOrFail($id);
 
-        return view('home', compact('beerSelected'));
+        return view('homepage', compact('beerSelected'));
     }
 }

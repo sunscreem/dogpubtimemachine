@@ -3,10 +3,14 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    Hello World
+                    @foreach($bars as $bar)
+                        <div>
+                            <a href="{{ route('admin.bar.edit',$bar->id) }}">{{ $bar->name }}</a>
+                        </div>
+                    @endforeach
                 </div>
              
             </div>

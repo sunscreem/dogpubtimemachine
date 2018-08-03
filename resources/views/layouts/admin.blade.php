@@ -4,11 +4,9 @@
     @include('layouts.partials.head-tags-and-scripts')
 </head>
 <body>
-    <div id="app">
-         @yield('content')
+    @include('layouts.partials.admin-nav')
+    <div id="app" class="py-4">
+        @yield('content')
     </div>
-     @include('layouts.partials.footer')
 </body>
 </html>
-
-

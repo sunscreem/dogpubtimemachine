@@ -11,12 +11,23 @@
 |
 */
 
-Route::get('/', 'PagesController@index')->name('home');
+Route::get('/', 'PagesController@index')->name('homepage');
 
 Route::get('/bar-has-beer/{beer}', 'BarController@hasBeer')->name('bars.hasBeer');
 
 Route::resource('beers', 'BeersController');
 
 Route::get('/system-status', 'SystemStatusController@index')->name('system.status');
-// route::get('/test', 'PagesController@index');
-// Route::get('/{id}', 'PagesController@beerSelected')->name('beerSelected');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Route::namespace('Admin')
+    ->middleware(['auth'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/bars', 'PagesController@bars')->name('bars');
+        Route::resource('bar', 'BarController');
+    });
