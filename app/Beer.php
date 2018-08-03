@@ -3,8 +3,10 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Ramsey\Uuid\Uuid;
 use App\Events\BeerCreated;
+use Spatie\SchemalessAttributes\SchemalessAttributes;
 
 class Beer extends Model
 {
@@ -13,6 +15,20 @@ class Beer extends Model
     protected $appends = ['nameAndBrewery', 'totalBars'];
 
     protected $hidden = ['uuid', 'created_at', 'updated_at'];
+
+    public $casts = [
+        'extra_attributes' => 'array',
+    ];
+
+    public function getExtraAttributesAttribute() : SchemalessAttributes
+    {
+        return SchemalessAttributes::createForModel($this, 'extra_attributes');
+    }
+
+    public function scopeWithExtraAttributes() : Builder
+    {
+        return SchemalessAttributes::scopeWithSchemalessAttributes('extra_attributes');
+    }
 
     public static function createWithAttributes(array $attributes): Beer
     {

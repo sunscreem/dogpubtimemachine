@@ -3,17 +3,33 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Ramsey\Uuid\Uuid;
 use App\Events\BarCreated;
 use Illuminate\Support\Collection;
 use App\Events\BeerAttachedToBar;
 use App\Events\BeerDetachedFromBar;
+use Spatie\SchemalessAttributes\SchemalessAttributes;
 
 class Bar extends Model
 {
     protected $guarded = [];
 
     protected $dates = ['tap_list_last_updated'];
+
+    public $casts = [
+        'extra_attributes' => 'array',
+    ];
+
+    public function getExtraAttributesAttribute() : SchemalessAttributes
+    {
+        return SchemalessAttributes::createForModel($this, 'extra_attributes');
+    }
+
+    public function scopeWithExtraAttributes() : Builder
+    {
+        return SchemalessAttributes::scopeWithSchemalessAttributes('extra_attributes');
+    }
 
     public function beers()
     {
