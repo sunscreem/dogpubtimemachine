@@ -30,5 +30,9 @@ class BarsBeersProjector implements Projector
 
     public function onBeerRemovedFromBar(RemoveBeerFromBar $event)
     {
+        dump($event->attributes);
+        Bar::find($event->attributes['bar_id'])
+            ->beers()
+            ->detach($event->attributes['beer_id']);
     }
 }

@@ -105,8 +105,6 @@ class FetchBrewdogBeers extends Command
 
         $result = $barToUpdate->syncBeers($thisBarsBeerIds);
 
-        // $result = $barToUpdate->beers()->sync($thisBarsBeerIds);
-
         $this->info('All done. (' . count($result['attached']) . ' Added, ' . count($result['detached']) . ' Detached)');
     }
 
