@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Ramsey\Uuid\Uuid;
 use App\Events\BarCreated;
 use Illuminate\Support\Collection;
-use App\Events\AttachBeerToBar;
-use App\Events\RemoveBeerFromBar;
+use App\Events\BeerAttachedToBar;
+use App\Events\BeerDetachedFromBar;
 
 class Bar extends Model
 {
@@ -43,20 +43,18 @@ class Bar extends Model
         $beers = $beers->toArray();
         $current = array_keys($this->beers->toArray());
 
-        // first lets see what needs attached
         $toBeAttached = collect(array_diff($beers, $current));
 
-        // now lets see what needs detached
         $toBeDetached = collect(array_diff($current, $beers));
 
         $toBeAttached->each(function ($beerId) {
-            event(new AttachBeerToBar(['beer_id' => $beerId,
+            event(new BeerAttachedToBar(['beer_id' => $beerId,
                                         'bar_id' => $this->id,
                                         'uuid' => (string) Uuid::uuid4()]));
         });
 
         $toBeDetached->each(function ($beerId) {
-            event(new RemoveBeerFromBar(['beer_id' => $beerId,
+            event(new BeerDetachedFromBar(['beer_id' => $beerId,
                                         'bar_id' => $this->id]));
         });
 

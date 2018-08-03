@@ -4,7 +4,7 @@ namespace App\Events;
 
 use Spatie\EventProjector\ShouldBeStored;
 
-class AttachBeerToBar implements ShouldBeStored
+class BeerAttachedToBar implements ShouldBeStored
 {
     /** @var array */
     public $attributes;
