@@ -10,6 +10,7 @@ use Illuminate\Support\Collection;
 use App\Events\BeerAttachedToBar;
 use App\Events\BeerDetachedFromBar;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
+use App\Events\BarUpdated;
 
 class Bar extends Model
 {
@@ -43,6 +44,13 @@ class Bar extends Model
         event(new BarCreated($attributes));
 
         return static::uuid($attributes['uuid']);
+    }
+
+    public function updateWithAttributes(array $attributes)
+    {
+        $attributes['bar_id'] = $this->id;
+
+        event(new BarUpdated($attributes));
     }
 
     public function syncBeers(Collection $beers): array
