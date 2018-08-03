@@ -13,6 +13,8 @@ class Bar extends Model
 {
     protected $guarded = [];
 
+    protected $dates = ['tap_list_last_updated'];
+
     public function beers()
     {
         return $this->belongsToMany(\App\Beer::class);

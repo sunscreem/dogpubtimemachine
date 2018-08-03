@@ -10,6 +10,10 @@ class Beer extends Model
 {
     protected $guarded = [];
 
+    protected $appends = ['nameAndBrewery', 'totalBars'];
+
+    protected $hidden = ['uuid', 'created_at', 'updated_at'];
+
     public static function createWithAttributes(array $attributes): Beer
     {
         $attributes['uuid'] = (string) Uuid::uuid4();
@@ -17,6 +21,21 @@ class Beer extends Model
         event(new BeerCreated($attributes));
 
         return static::uuid($attributes['uuid']);
+    }
+
+    public function bars()
+    {
+        return $this->belongsToMany(\App\Bar::class);
+    }
+
+    public function getNameAndBreweryAttribute()
+    {
+        return $this->name . ' / ' . $this->brewery;
+    }
+
+    public function getTotalBarsAttribute()
+    {
+        return $this->bars()->count();
     }
 
     /*
