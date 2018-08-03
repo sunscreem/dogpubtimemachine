@@ -41,12 +41,12 @@ class Bar extends Model
     public function syncBeers(Collection $beers): array
     {
         $beers = $beers->toArray();
-        $current = array_keys($this->beers->toArray());
+        $current = $this->beers->pluck('id')->toArray();
 
         $toBeAttached = collect(array_diff($beers, $current));
 
         $toBeDetached = collect(array_diff($current, $beers));
-
+        // dd($beers, $current);
         $toBeAttached->each(function ($beerId) {
             event(new BeerAttachedToBar(['beer_id' => $beerId,
                                         'bar_id' => $this->id,
