@@ -71,7 +71,7 @@ class BarController extends Controller
      */
     public function update(BarUpdateRequest $request, Bar $bar)
     {
-        $bar->updateWithAttributes($request->only(['name']));
+        $bar->updateWithAttributes($request->only(['name', 'uuid']));
 
         $request->session()->flash('success', 'The bar has been updated');
 

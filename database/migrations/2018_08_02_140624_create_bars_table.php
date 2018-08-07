@@ -14,8 +14,7 @@ class CreateBarsTable extends Migration
     public function up()
     {
         Schema::create('bars', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('uuid');
+            $table->string('uuid')->primary();
             $table->string('name');
             $table->string('tap_list_url')->nullable();
             $table->string('bar_url')->nullable();

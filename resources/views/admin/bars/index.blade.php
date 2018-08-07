@@ -8,7 +8,7 @@
                 <div class="card-body">
                     @foreach($bars as $bar)
                         <div>
-                            <a href="{{ route('admin.bar.edit',$bar->id) }}">{{ $bar->name }}</a>
+                            <a href="{{ route('admin.bar.edit',$bar->uuid) }}">{{ $bar->name }}</a>
                         </div>
                     @endforeach
                 </div>

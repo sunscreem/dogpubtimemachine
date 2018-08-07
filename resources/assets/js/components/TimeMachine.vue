@@ -77,7 +77,7 @@
       getBarsForBeer(beer, updateUrl = true) {
         this.barsHeaderText = 'Loading...';
         document.getElementById("bars").scrollIntoView({behavior:'smooth'});
-        axios.get(route('bars.hasBeer', beer.id)).then((response) => {
+        axios.get(route('bars.hasBeer', beer.uuid)).then((response) => {
           this.bars = response.data;
           this.barsHeaderText = beer.name + ' by ' + beer.brewery + ' on tap in ' + this.bars.length + ' Brewdog bar' + (this.bars.length !== 1 ? 's' : '') + ':';
           // if (updateUrl) {

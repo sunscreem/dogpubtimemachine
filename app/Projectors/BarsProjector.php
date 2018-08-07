@@ -27,7 +27,7 @@ class BarsProjector implements Projector
 
     public function onBarUpdate(BarUpdated $event)
     {
-        Bar::find($event->barAttributes['bar_id'])->update(['name' => $event->barAttributes['name']]);
+        Bar::find($event->barAttributes['uuid'])->update(['name' => $event->barAttributes['name']]);
     }
 
     public function resetState()
@@ -37,6 +37,6 @@ class BarsProjector implements Projector
 
     public function streamEventsBy(): string
     {
-        return 'accountUuid';
+        return 'uuid';
     }
 }

@@ -14,12 +14,11 @@ class CreateBarBeerPivotTable extends Migration
     public function up()
     {
         Schema::create('bar_beer', function (Blueprint $table) {
-            $table->string('uuid');
-            $table->integer('bar_id')->unsigned()->index();
-            $table->foreign('bar_id')->references('id')->on('bars')->onDelete('cascade');
-            $table->integer('beer_id')->unsigned()->index();
-            $table->foreign('beer_id')->references('id')->on('beers')->onDelete('cascade');
-            $table->primary(['bar_id', 'beer_id']);
+            $table->string('bar_uuid')->index();
+            $table->foreign('bar_uuid')->references('uuid')->on('bars')->onDelete('cascade');
+            $table->string('beer_uuid')->index();
+            $table->foreign('beer_uuid')->references('uuid')->on('beers')->onDelete('cascade');
+            $table->primary(['bar_uuid', 'beer_uuid']);
         });
     }
 

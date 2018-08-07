@@ -125,7 +125,7 @@ class FetchBrewdogBeers extends Command
             $ourBeer = Beer::createWithAttributes(['name' => $tapBeer[0], 'brewery' => $matches[1]]);
         }
 
-        return $ourBeer->id;
+        return $ourBeer->uuid;
     }
 
     private function sortOutTheLastUpdatedTime($lastUpdatedText)

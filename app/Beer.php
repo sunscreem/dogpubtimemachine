@@ -10,11 +10,17 @@ use Spatie\SchemalessAttributes\SchemalessAttributes;
 
 class Beer extends Model
 {
+    protected $primaryKey = 'uuid';
+
+    public $incrementing = false;
+
+    protected $keyType = 'string';
+
     protected $guarded = [];
 
     protected $appends = ['nameAndBrewery', 'totalBars'];
 
-    protected $hidden = ['uuid', 'created_at', 'updated_at'];
+    protected $hidden = ['created_at', 'updated_at'];
 
     public $casts = [
         'extra_attributes' => 'array',

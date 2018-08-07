@@ -22,15 +22,15 @@ class BarsBeersProjector implements Projector
 
     public function onBeerAttachedToBar(BeerAttachedToBar $event)
     {
-        Bar::find($event->attributes['bar_id'])
+        Bar::find($event->attributes['bar_uuid'])
             ->beers()
-            ->attach($event->attributes['beer_id'], ['uuid' => $event->attributes['uuid']]);
+            ->attach($event->attributes['beer_uuid']);
     }
 
     public function onBeerRemovedFromBar(BeerDetachedFromBar $event)
     {
-        Bar::find($event->attributes['bar_id'])
+        Bar::find($event->attributes['bar_uuid'])
             ->beers()
-            ->detach($event->attributes['beer_id']);
+            ->detach($event->attributes['beer_uuid']);
     }
 }

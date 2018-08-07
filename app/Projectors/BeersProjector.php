@@ -30,6 +30,6 @@ class BeersProjector implements Projector
 
     public function streamEventsBy(): string
     {
-        return 'accountUuid';
+        return 'uuid';
     }
 }

@@ -14,8 +14,7 @@ class CreateBeersTable extends Migration
     public function up()
     {
         Schema::create('beers', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('uuid');
+            $table->string('uuid')->primary();
             $table->string('name');
             $table->string('brewery');
             $table->timestamps();
