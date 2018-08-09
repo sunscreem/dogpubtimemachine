@@ -31,6 +31,8 @@ Vue.component('bar', require('./components/Bar.vue'));
 Vue.component('time-machine', require('./components/TimeMachine.vue'));
 Vue.component('system-status', require('./components/Status.vue'));
 
+Vue.component('date-change', require('./components/DateChange.vue'));
+
 require('es6-promise').polyfill();
 
 const bugsnag = require('bugsnag-js');

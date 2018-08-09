@@ -25,6 +25,7 @@
     "es6-promise": "^4.2.4",
     "smoothscroll-polyfill": "^0.4.3",
     "v-tooltip": "^2.0.0-rc.33",
-    "vue-sweetalert2": "^1.4.2"
+    "vue-sweetalert2": "^1.4.2",
+    "vuejs-datepicker": "^1.5.2"
   }
 }

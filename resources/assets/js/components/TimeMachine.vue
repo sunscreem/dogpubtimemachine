@@ -35,6 +35,7 @@
 </template>
 
 <script>
+
   export default {
     data() {
       return {
@@ -44,6 +45,8 @@
         bars: [],
       }
     },
+
+    
 
     mounted() {
       this.fetchTheBeers();
