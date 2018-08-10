@@ -4,16 +4,23 @@
 
 <div class="container">
     <div class="d-flex justify-content-between">
-    <span>
-        <h1 class="mt-3">Dog Pub Time Machine</h1>
-        <h6>What beers are on tap in Brewdog bars?</h6>
-    </span>
-    <span class="text-right">
-        <date-change></date-change>
-        <h6 class="text-center mb-4">Right now there are {{ $totalBeers }} beers on tap across {{ $totalBars }} Brewdog bars!</h6>
-    </span>
+        <span>
+            <h1 class="mt-3">Dog Pub Time Machine</h1>
+        </span>
+        <span class="text-right">
+            {{-- <date-change></date-change> --}}
+        </span>
     </div>
 
+    <div class="d-flex justify-content-between">
+        <span>
+            <h6>What beers are on tap in Brewdog bars?</h6>
+        </span>
+        <span class="text-right">
+            <h6 class="text-center">Right now there are {{ $totalBeers }} beers on tap across {{ $totalBars }} Brewdog bars!</h6>
+        </span>
+    </div>
+    
     <time-machine></time-machine>
 
     <div class="card shadow">
