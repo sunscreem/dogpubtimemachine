@@ -16,7 +16,9 @@ class BarController extends Controller
      */
     public function index()
     {
-        //
+        $bars = Bar::orderBy('name')->get();
+
+        return view('admin.bar.index')->with(compact('bars'));
     }
 
     /**
@@ -26,7 +28,7 @@ class BarController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.bar.create');
     }
 
     /**
@@ -35,9 +37,13 @@ class BarController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BarUpdateRequest $request)
     {
-        //
+        Bar::createWithAttributes($request->validated());
+
+        $request->session()->flash('success', 'The bar has been created!');
+
+        return redirect(route('admin.bar.index'));
     }
 
     /**
@@ -71,7 +77,7 @@ class BarController extends Controller
      */
     public function update(BarUpdateRequest $request, Bar $bar)
     {
-        $bar->updateWithAttributes($request->only(['name', 'uuid']));
+        $bar->updateWithAttributes($request->validated());
 
         $request->session()->flash('success', 'The bar has been updated');
 

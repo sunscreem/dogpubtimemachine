@@ -24,7 +24,11 @@ class BarUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required'
+            'name' => 'required|min:3',
+            'territory' => 'required',
+            'bar_url' => 'required|url',
+            'tap_list_url' => 'required|url',
+            'uuid' => 'string'
         ];
     }
 }

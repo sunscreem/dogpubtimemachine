@@ -28,6 +28,5 @@ Route::namespace('Admin')
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
-        Route::get('/bars', 'PagesController@bars')->name('bars');
         Route::resource('bar', 'BarController');
     });

@@ -22,12 +22,18 @@ class BarsProjector implements Projector
 
     public function onBarCreated(BarCreated $event)
     {
-        Bar::create($event->barAttributes);
+        $bar = Bar::create($event->barAttributes);
+
+        $bar->update(['updated_at' => now()->subDays(14)]); // makes sure its the next to be updated
     }
 
     public function onBarUpdate(BarUpdated $event)
     {
-        Bar::find($event->barAttributes['uuid'])->update(['name' => $event->barAttributes['name']]);
+        Bar::find($event->barAttributes['uuid'])
+            ->update(['name' => $event->barAttributes['name'],
+                        'territory' => $event->barAttributes['territory'],
+                        'bar_url' => $event->barAttributes['bar_url'],
+                        'tap_list_url' => $event->barAttributes['tap_list_url']]);
     }
 
     public function resetState()
