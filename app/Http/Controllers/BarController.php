@@ -17,7 +17,7 @@ class BarController extends Controller
                 'name' => $bar->name,
                 'lastChecked' => $lastChecked,
                 'tapListLastUpdated' => $tapListLastUpdate,
-                'brewdog_site_listing_url' => $bar->brewdog_site_listing_url
+                'brewdog_site_listing_url' => $bar->bar_url
             ];
         });
     }
