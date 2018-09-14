@@ -1,16 +1,28 @@
 <template>
     <div class="mt-3 mb-2">
-        Go Back In Time! <strong>Change Date: </strong>
-          <div tabIndex="1" @blur="hideDatepicker" class="d-inline-block">
+        <span v-if="dateToShow">
+            <h4 class="text-danger link" @click="showDatePicker">Showing Beers From {{ dateToShow }}</h4>
+        </span>
+        <span v-else-if="changingDate">
+          Choose A Date: 
+          <div tabIndex="1" @blur="hideDatePicker" class="d-inline-block ml-1">
             <datepicker 
-                ref="datepicker"
-                :value="formattedValue"
-                :full-month-name="true"
-                :monday-first="true"
-                :format="formatDate"
-                :bootstrap-styling="true"
+                    ref="datepicker"
+                    v-model="selectedDate"
+                    :full-month-name="true"
+                    :monday-first="true"
+                    :format="formatDate"
+                    :disabled-dates="disabledDates"
+                    :bootstrap-styling="true"
+                    v-on:selected="dateSelected"
             ></datepicker>
-        </div>
+          </div>
+        </span>
+        <span v-else>
+            Go Back In Time! 
+            <a href="#" @click.prevent="showDatePicker">Choose A Date</a>
+        </span>
+
     </div>
 </template>
 
@@ -22,19 +34,21 @@
         
         data() {
             return {
-                date: ''
+                selectedDate: new Date(),
+                dateToShow: null,
+                changingDate: false,
+                disabledDates: {
+                    to: new Date(this.timeMachineStartsDate),
+                    from: new Date()
+                }
             }
         },
 
         components: {
             Datepicker
         },
-
-        computed: {
-            formattedValue() {
-                return this.formatDate(this.value)
-            }
-        },
+        
+        props: ['timeMachineStartsDate'],
 
         methods: {
             hideDatepicker() {
@@ -47,6 +61,24 @@
                                     + dateObj.getFullYear()
                 return formattedDate
             },
+            showDatePicker() {
+                 this.dateToShow = null;
+                 this.changingDate = true;
+                 this.$nextTick()
+                 .then(()=>{ this.$refs.datepicker.showCalendar(); });
+            },
+            hideDatePicker() {
+                 this.changingDate = false;
+            },
+            dateSelected(){
+                this.changingDate = false;
+                this.$nextTick()
+                 .then(()=>{ 
+                     this.dateToShow = this.formatDate(this.selectedDate);  
+                     this.$emit('date-changed',this.selectedDate);
+                });
+            }
+            
         }
 
     }

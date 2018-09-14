@@ -46,34 +46,32 @@
       }
     },
 
-    
+    props: ['selectedDate'],
 
     mounted() {
       this.fetchTheBeers();
-      // if (this.beerSelected.id > 0) {
-      //   this.getBarsForBeer(this.beerSelected,false)
-      // }
-      // window.onpopstate = function(event) {
-      //   if (event.state && event.state.id > 0) {
-      //     this.getBarsForBeer(event.state, false);
-      //   }
-      // }.bind(this);
+    },
+
+    watch: {
+       selectedDate: function(){
+          this.fetchTheBeers();
+       }
     },
 
     methods: {
 
       fetchTheBeers() {
-        axios.get(route('beers.index'))
+        axios.get(route('beers.index')+'?temp='+this.selectedDate)
           .then((response) => {
             this.beers = response.data;
             this.beerHeaderText = 'There are ' + this.beers.length + ' beers on tap. Click on a beer...';
           })
           .catch(error => {
-            this.$swal({
-              text: (error.response ? error.response.statusText : 'Are you offline?'),
-              title: 'Something went wrong!',
-              type: 'error'
-            });
+                let errorText = (error.status ? error.response.statusText : error);
+                this.$swal({text: errorText,
+                    title: 'Something went wrong!',
+                    type: 'error'});
+                
           });
       },
 
@@ -83,24 +81,16 @@
         axios.get(route('bars.hasBeer', beer.uuid)).then((response) => {
           this.bars = response.data;
           this.barsHeaderText = beer.name + ' by ' + beer.brewery + ' on tap in ' + this.bars.length + ' Brewdog bar' + (this.bars.length !== 1 ? 's' : '') + ':';
-          // if (updateUrl) {
-          //   history.pushState(beer, beer.name, beer.id);
-          // }
+       
         })
           .catch(error => {
-            this.$swal({
-              text: (error.response ? error.response.statusText : 'Are you offline?'),
-              title: 'Something went wrong!',
-              type: 'error'
-            });
+              let errorText = (error.status ? error.response.statusText : error);
+              this.$swal({text: errorText,
+                  title: 'Something went wrong!',
+                  type: 'error'});
           });
 
       }
     },
-
-    // props: {
-    //   'beerSelected': Object
-    // }
-
   }
 </script>

@@ -48,6 +48,18 @@ bugsnagClient.use(bugsnagVue(Vue));
 
 const app = new Vue({
   el: '#app',
+
+  data() {
+    return {
+      selectedDate: null
+    }
+  },
+  
+  methods: {
+    dateChanged(selectedDate) {
+      this.selectedDate = selectedDate;
+    }
+  }
 });
 
 

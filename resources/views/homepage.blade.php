@@ -8,7 +8,9 @@
             <h1 class="mt-3">Dog Pub Time Machine</h1>
         </span>
         <span class="text-right">
-            {{-- <date-change></date-change> --}}
+            <date-change :time-machine-starts-date="'{{ config('site.timeMachineStartDate') }}'"
+                         @date-changed="dateChanged"
+            ></date-change>
         </span>
     </div>
 
@@ -21,7 +23,7 @@
         </span>
     </div>
     
-    <time-machine></time-machine>
+    <time-machine :selected-date="selectedDate"></time-machine>
 
     <div class="card shadow">
         <div class="card-header">
