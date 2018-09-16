@@ -61,7 +61,14 @@
     methods: {
 
       fetchTheBeers() {
-        axios.get(route('beers.index')+'?temp='+this.selectedDate)
+
+        let params = {};
+
+        if (this.selectedDate) { params.d = this.selectedDate.toJSON(); }
+
+        axios.get(route('beers.index'),{
+          params: params
+        })
           .then((response) => {
             this.beers = response.data;
             this.beerHeaderText = 'There are ' + this.beers.length + ' beers on tap. Click on a beer...';

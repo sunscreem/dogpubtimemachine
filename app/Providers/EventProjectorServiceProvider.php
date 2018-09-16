@@ -7,6 +7,7 @@ use Spatie\EventProjector\Facades\Projectionist;
 use App\Projectors\BarsProjector;
 use App\Projectors\BeersProjector;
 use App\Projectors\BarsBeersProjector;
+use App\Projectors\HistoryProjector;
 
 class EventProjectorServiceProvider extends ServiceProvider
 {
@@ -19,6 +20,7 @@ class EventProjectorServiceProvider extends ServiceProvider
     {
         Projectionist::addProjectors([BarsProjector::class,
                                         BeersProjector::class,
-                                        BarsBeersProjector::class]);
+                                        BarsBeersProjector::class,
+                                        HistoryProjector::class, ]);
     }
 }
