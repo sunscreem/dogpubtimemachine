@@ -46,6 +46,8 @@ class HistoryProjector implements Projector
 
         // rob - you are here. Now just pass that date through from the controller and skip any events passsed that date
 
+        dd($this->targetEndDate);
+
         $newBeer = new Beer($event->beerAttributes);
 
         $beers->push($newBeer);
