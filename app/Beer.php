@@ -18,9 +18,11 @@ class Beer extends Model
 
     protected $guarded = [];
 
-    protected $appends = ['nameAndBrewery', 'totalBars'];
+    protected $appends = ['totalBars', 'barUUIDs'];
 
-    protected $hidden = ['created_at', 'updated_at'];
+    protected $hidden = ['bars', 'created_at', 'updated_at'];
+
+    protected $with = ['bars'];
 
     public $casts = [
         'extra_attributes' => 'array',
@@ -50,9 +52,9 @@ class Beer extends Model
         return $this->belongsToMany(\App\Bar::class);
     }
 
-    public function getNameAndBreweryAttribute()
+    public function getBarUUIDsAttribute()
     {
-        return $this->name . ' / ' . $this->brewery;
+        return $this->bars->pluck('uuid');
     }
 
     public function getTotalBarsAttribute()

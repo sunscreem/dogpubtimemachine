@@ -1,6 +1,6 @@
 <template>
     <div>
-        <a @click="showBars" class="link">{{ beer.nameAndBrewery }} / {{ totalBars }}</a>
+        <a @click="showBars" class="link">{{ beer.name }} / {{ beer.brewery }} / {{ totalBars }}</a>
     </div>
 </template>
 

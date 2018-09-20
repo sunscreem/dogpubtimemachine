@@ -11,13 +11,27 @@ class PagesController extends Controller
 {
     public function index()
     {
-        $totalBars = Bar::count();
+        // $totalBars = Bar::count();
 
-        $totalBeers = Beer::all()->filter(function ($value) {
-            return $value->totalBars;
-        })->count();
+        // $totalBeers = Beer::all()->filter(function ($value) {
+        //     return $value->totalBars;
+        // })->count();
 
-        return view('homepage', compact('totalBeers', 'totalBars'));
+        $bars = Bar::select('name', 'uuid')
+                ->orderBy('name')
+                ->get();
+
+        // ->keyBy('uuid');
+        //  ->all();
+
+        $beers = Beer::select('name', 'brewery', 'uuid')
+                       ->get()
+                       ->sortByDesc('totalBars')
+                       ->values();
+        $initialData = ['beers' => $beers,
+                        'bars' => $bars];
+
+        return view('homepage', compact('initialData'));
     }
 
     public function beerSelected($id)

@@ -19,11 +19,11 @@
             <h6>What beers are on tap in Brewdog bars?</h6>
         </span>
         <span class="text-right">
-            <h6 class="text-center">Right now there are {{ $totalBeers }} beers on tap across {{ $totalBars }} Brewdog bars!</h6>
+            <h6 class="text-center">Right now there are {{ $initialData['beers']->count() }} beers on tap across {{ $initialData['bars']->count() }} Brewdog bars!</h6>
         </span>
     </div>
     
-    <time-machine :selected-date="selectedDate"></time-machine>
+    <time-machine :selected-date="selectedDate" :initial-data="{{ json_encode($initialData) }}"></time-machine>
 
     <div class="card shadow">
         <div class="card-header">

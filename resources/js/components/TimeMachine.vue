@@ -7,7 +7,7 @@
           <div class="card-body beers">
             <div v-if="beers.length">
               <div v-for="beer in beers">
-                <beer :beer="beer" @showBars="getBarsForBeer"></beer>
+                <beer :beer="beer" @showBars="showBarsForBeer"></beer>
               </div>
             </div>
             <div v-else class="text-center pt-5"><img src="/images/spinner.gif"></div>
@@ -41,75 +41,87 @@
       return {
         beerHeaderText: 'Loading...',
         barsHeaderText: 'Choose A Beer',
-        beers: [],
+        beers: this.initialData.beers,
         bars: [],
       }
     },
 
-    props: ['selectedDate'],
-
-    mounted() {
-      this.fetchTheBeers();
-    },
+    props: ['selectedDate','initialData'],
 
     watch: {
        selectedDate: function(){
-          this.fetchTheBeers();
+          // this.fetchTheBeers();
        }
+    },
+
+    created(){
+        
+        this.beerHeaderText = 'There are ' + this.beers.length + ' beers on tap. Click on a beer...';
+        
     },
 
     methods: {
 
       fetchTheBeers() {
 
-        let params = {};
+        // let params = {};
 
-        if (this.selectedDate) { params.d = this.selectedDate.toJSON(); }
+        // if (this.selectedDate) { params.d = this.selectedDate.toJSON(); }
 
-        axios.get(route('beers.index'),{
-          params: params
-        })
-          .then((response) => {
-            this.beers = response.data;
-            this.beerHeaderText = 'There are ' + this.beers.length + ' beers on tap. Click on a beer...';
-            if (this.selectedDate) { 
-                this.beerHeaderText = 'On '+this.selectedDate.toLocaleDateString()+' there were '+ this.beers.length + ' beers on tap. Click on a beer...'; 
-            }
-          })
-          .catch(error => {
-                let errorText = (error.status ? error.response.statusText : error);
-                this.$swal({text: errorText,
-                    title: 'Something went wrong!',
-                    type: 'error'});
+        // axios.get(route('beers.index'),{
+        //   params: params
+        // })
+        //   .then((response) => {
+        //     this.beers = response.data;
+        //     this.beerHeaderText = 'There are ' + this.beers.length + ' beers on tap. Click on a beer...';
+        //     if (this.selectedDate) { 
+        //         this.beerHeaderText = 'On '+this.selectedDate.toLocaleDateString()+' there were '+ this.beers.length + ' beers on tap. Click on a beer...'; 
+        //     }
+        //   })
+        //   .catch(error => {
+        //         let errorText = (error.status ? error.response.statusText : error);
+        //         this.$swal({text: errorText,
+        //             title: 'Something went wrong!',
+        //             type: 'error'});
                 
-          });
+        //   });
       },
 
-      getBarsForBeer(beer) {
+      showBarsForBeer(beer) {
 
-        let params = {};
+          //  console.log(beer.beer.barUUIDs);
 
-        if (this.selectedDate) { params.d = this.selectedDate.toJSON(); }
+           this.bars = this.initialData.bars.filter(bar => beer.barUUIDs.includes(bar.uuid));
 
-        this.barsHeaderText = 'Loading...';
-        document.getElementById("bars").scrollIntoView({behavior:'smooth'});
-        axios.get(route('bars.hasBeer', beer.uuid),{
-          params: params
-        }).then((response) => {
-          this.bars = response.data;
-
-          this.barsHeaderText = beer.name + ' by ' + beer.brewery + ' on tap in ' + this.bars.length + ' Brewdog bar' + (this.bars.length !== 1 ? 's' : '') + ':';
+           this.barsHeaderText = beer.name + ' by ' + beer.brewery + ' on tap in ' + this.bars.length + ' Brewdog bar' + (this.bars.length !== 1 ? 's' : '') + ':';
        
-         if (this.selectedDate) { 
-           this.barsHeaderText = beer.name + ' by ' + beer.brewery + ' was on tap in '+  this.bars.length +' Brewdog bar' + (this.bars.length !== 1 ? 's' : '') + ' on '+ this.selectedDate.toLocaleDateString() +':';
-         }
-        })
-          .catch(error => {
-              let errorText = (error.status ? error.response.statusText : error);
-              this.$swal({text: errorText,
-                  title: 'Something went wrong!',
-                  type: 'error'});
-          });
+// console.log(barsToShow);
+          //  this.bars.push(this.initialData.bars['076040e5-c597-4681-8acd-639baac03f22'])
+          //  this.bars.push(this.bars[0])
+           
+      //   let params = {};
+
+      //   if (this.selectedDate) { params.d = this.selectedDate.toJSON(); }
+
+      //   this.barsHeaderText = 'Loading...';
+      //   document.getElementById("bars").scrollIntoView({behavior:'smooth'});
+      //   axios.get(route('bars.hasBeer', beer.uuid),{
+      //     params: params
+      //   }).then((response) => {
+      //     this.bars = response.data;
+
+      //     this.barsHeaderText = beer.name + ' by ' + beer.brewery + ' on tap in ' + this.bars.length + ' Brewdog bar' + (this.bars.length !== 1 ? 's' : '') + ':';
+       
+      //    if (this.selectedDate) { 
+      //      this.barsHeaderText = beer.name + ' by ' + beer.brewery + ' was on tap in '+  this.bars.length +' Brewdog bar' + (this.bars.length !== 1 ? 's' : '') + ' on '+ this.selectedDate.toLocaleDateString() +':';
+      //    }
+      //   })
+      //     .catch(error => {
+      //         let errorText = (error.status ? error.response.statusText : error);
+      //         this.$swal({text: errorText,
+      //             title: 'Something went wrong!',
+      //             type: 'error'});
+      //     });
 
       }
     },
