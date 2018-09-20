@@ -72,6 +72,9 @@
           .then((response) => {
             this.beers = response.data;
             this.beerHeaderText = 'There are ' + this.beers.length + ' beers on tap. Click on a beer...';
+            if (this.selectedDate) { 
+                this.beerHeaderText = 'On '+this.selectedDate.toLocaleDateString()+' there were '+ this.beers.length + ' beers on tap. Click on a beer...'; 
+            }
           })
           .catch(error => {
                 let errorText = (error.status ? error.response.statusText : error);
@@ -82,13 +85,24 @@
           });
       },
 
-      getBarsForBeer(beer, updateUrl = true) {
+      getBarsForBeer(beer) {
+
+        let params = {};
+
+        if (this.selectedDate) { params.d = this.selectedDate.toJSON(); }
+
         this.barsHeaderText = 'Loading...';
         document.getElementById("bars").scrollIntoView({behavior:'smooth'});
-        axios.get(route('bars.hasBeer', beer.uuid)).then((response) => {
+        axios.get(route('bars.hasBeer', beer.uuid),{
+          params: params
+        }).then((response) => {
           this.bars = response.data;
+
           this.barsHeaderText = beer.name + ' by ' + beer.brewery + ' on tap in ' + this.bars.length + ' Brewdog bar' + (this.bars.length !== 1 ? 's' : '') + ':';
        
+         if (this.selectedDate) { 
+           this.barsHeaderText = beer.name + ' by ' + beer.brewery + ' was on tap in '+  this.bars.length +' Brewdog bar' + (this.bars.length !== 1 ? 's' : '') + ' on '+ this.selectedDate.toLocaleDateString() +':';
+         }
         })
           .catch(error => {
               let errorText = (error.status ? error.response.statusText : error);

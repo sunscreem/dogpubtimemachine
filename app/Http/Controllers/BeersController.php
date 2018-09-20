@@ -23,7 +23,6 @@ class BeersController extends Controller
             $beers = $this->fetchBeersForDate();
         }
 
-        // dd($beers->toArray());
         return $beers->filter(function ($value) {
             return $value->totalBars;
         })
