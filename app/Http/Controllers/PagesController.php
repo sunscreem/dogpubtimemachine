@@ -11,23 +11,15 @@ class PagesController extends Controller
 {
     public function index()
     {
-        // $totalBars = Bar::count();
-
-        // $totalBeers = Beer::all()->filter(function ($value) {
-        //     return $value->totalBars;
-        // })->count();
-
         $bars = Bar::select('name', 'uuid')
                 ->orderBy('name')
                 ->get();
-
-        // ->keyBy('uuid');
-        //  ->all();
 
         $beers = Beer::select('name', 'brewery', 'uuid')
                        ->get()
                        ->sortByDesc('totalBars')
                        ->values();
+     
         $initialData = ['beers' => $beers,
                         'bars' => $bars];
 

@@ -21,6 +21,8 @@ class HistoryProjector implements Projector
 
     protected $targetEndDate;
 
+    public $data = ['beers' => [], 'bars' => []];
+
     /**
      * @param mixed $targetEventId
     *
@@ -46,9 +48,10 @@ class HistoryProjector implements Projector
 
     public function resetState()
     {
-        Session::forget(['beers', 'bars']);
+        dump('Started a fresh build.');
+        // Session::forget(['beers', 'bars']);
 
-        $beers = Session::get('beers', collect());
+        // $beers = Session::get('beers', collect());
     }
 
     public function onBeerCreated(StoredEvent $storedEvent)
@@ -57,11 +60,16 @@ class HistoryProjector implements Projector
             return;
         }
 
-        $beers = Session::get('beers', collect());
+        $beer = $storedEvent->event->beerAttributes;
 
-        $beers->push(new Beer($storedEvent->event->beerAttributes));
+        // dump("A new beer has been added: {$storedEvent->event->beerAttributes['name']} by {$storedEvent->event->beerAttributes['brewery']}");
 
-        Session::put('beers', $beers);
+        $this->data['beers'][$beer['uuid']] = ['name' => $beer['name'], 'brewery' => $beer['brewery']];
+        // $beers = Session::get('beers', collect());
+
+        // $beers->push(new Beer($storedEvent->event->beerAttributes));
+
+        // Session::put('beers', $beers);
     }
 
     public function onBarCreated(StoredEvent $storedEvent)
@@ -70,11 +78,16 @@ class HistoryProjector implements Projector
             return;
         }
 
-        $bars = Session::get('bars', collect());
+        // dump("A new bar has been added: {$storedEvent->event->barAttributes['name']}");
 
-        $bars->push(new Bar($storedEvent->event->barAttributes));
+        $bar = $storedEvent->event->barAttributes;
 
-        Session::put('bars', $bars);
+        $this->data['bars'][$bar['uuid']] = ['name' => $bar['name']];
+        // $bars = Session::get('bars', collect());
+
+        // $bars->push(new Bar($storedEvent->event->barAttributes));
+
+        // Session::put('bars', $bars);
     }
 
     public function onBarUpdate(StoredEvent $storedEvent)
@@ -83,16 +96,24 @@ class HistoryProjector implements Projector
             return;
         }
 
-        $bars = Session::get('bars', collect());
+        dump("A bar has been updated: {$storedEvent->event->barAttributes['name']}");
 
-        $updatedBars = $bars->map(function ($bar) use ($storedEvent) {
-            if ($bar->uuid != $storedEvent->event->barAttributes['uuid']) {
-                return $bar;
-            };
-            return $bar->fill($storedEvent->event->barAttributes);
-        });
+        $bar = $storedEvent->event->barAttributes;
 
-        Session::put('bars', $updatedBars);
+        // dd($bar, $this->bars[$bar['uuid']]);
+
+        $this->data['bars'][$bar['uuid']] = ['name' => $bar['name']];
+
+        // $bars = Session::get('bars', collect());
+
+        // $updatedBars = $bars->map(function ($bar) use ($storedEvent) {
+        //     if ($bar->uuid != $storedEvent->event->barAttributes['uuid']) {
+        //         return $bar;
+        //     };
+        //     return $bar->fill($storedEvent->event->barAttributes);
+        // });
+
+        // Session::put('bars', $updatedBars);
     }
 
     public function onBeerAttachedToBar()
