@@ -15,7 +15,7 @@ class CreateHistoricDatasTable extends Migration
     {
         Schema::create('historic_datas', function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamp('date');
+            $table->timestamp('dataEndsAtDate');
             $table->json('data');
             $table->timestamps();
         });

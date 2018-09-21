@@ -19,20 +19,13 @@ class HistoryProjector implements Projector
 {
     use ProjectsEvents;
 
-    protected $targetEndDate;
+    public $currentDayForData;
+    public $buildData;
+    public $data = [];
 
-    public $data = ['beers' => [], 'bars' => []];
-
-    /**
-     * @param mixed $targetEventId
-    *
-    * @return static
-    */
-    public function setTargetEndDate($targetEndDate)
+    public function __construct()
     {
-        $this->targetEndDate = Carbon::parse($targetEndDate)->endOfDay();
-
-        return $this;
+        $this->currentDayForData = Carbon::parse(config('site.timeMachineStartDate'))->endOfDay();
     }
 
     /*
@@ -48,23 +41,18 @@ class HistoryProjector implements Projector
 
     public function resetState()
     {
-        dump('Started a fresh build.');
-        // Session::forget(['beers', 'bars']);
-
-        // $beers = Session::get('beers', collect());
     }
 
     public function onBeerCreated(StoredEvent $storedEvent)
     {
-        if (Carbon::parse($storedEvent->created_at)->gt($this->targetEndDate)) {
-            return;
-        }
+        // dd($this->targetEndDate);
+        $this->checkDate($storedEvent);
 
         $beer = $storedEvent->event->beerAttributes;
 
         // dump("A new beer has been added: {$storedEvent->event->beerAttributes['name']} by {$storedEvent->event->beerAttributes['brewery']}");
 
-        $this->data['beers'][$beer['uuid']] = ['name' => $beer['name'], 'brewery' => $beer['brewery']];
+        $this->buildData['beers'][$beer['uuid']] = $beer;
         // $beers = Session::get('beers', collect());
 
         // $beers->push(new Beer($storedEvent->event->beerAttributes));
@@ -74,15 +62,13 @@ class HistoryProjector implements Projector
 
     public function onBarCreated(StoredEvent $storedEvent)
     {
-        if (Carbon::parse($storedEvent->created_at)->gt($this->targetEndDate)) {
-            return;
-        }
+        $this->checkDate($storedEvent);
 
         // dump("A new bar has been added: {$storedEvent->event->barAttributes['name']}");
 
         $bar = $storedEvent->event->barAttributes;
 
-        $this->data['bars'][$bar['uuid']] = ['name' => $bar['name']];
+        $this->buildData['bars'][$bar['uuid']] = $bar;
         // $bars = Session::get('bars', collect());
 
         // $bars->push(new Bar($storedEvent->event->barAttributes));
@@ -92,17 +78,13 @@ class HistoryProjector implements Projector
 
     public function onBarUpdate(StoredEvent $storedEvent)
     {
-        if (Carbon::parse($storedEvent->created_at)->gt($this->targetEndDate)) {
-            return;
-        }
+        $this->checkDate($storedEvent);
 
-        dump("A bar has been updated: {$storedEvent->event->barAttributes['name']}");
+        // dump("A bar has been updated: {$storedEvent->event->barAttributes['name']}");
 
         $bar = $storedEvent->event->barAttributes;
 
-        // dd($bar, $this->bars[$bar['uuid']]);
-
-        $this->data['bars'][$bar['uuid']] = ['name' => $bar['name']];
+        $this->buildData['bars'][$bar['uuid']] = $bar;
 
         // $bars = Session::get('bars', collect());
 
@@ -116,18 +98,55 @@ class HistoryProjector implements Projector
         // Session::put('bars', $updatedBars);
     }
 
-    public function onBeerAttachedToBar()
+    public function onBeerAttachedToBar(StoredEvent $storedEvent)
     {
-        // code...
+        $this->checkDate($storedEvent);
+
+        $barUUID = $storedEvent->event->attributes['bar_uuid'];
+        $beerUUID = $storedEvent->event->attributes['beer_uuid'];
+
+        $this->buildData['beers'][$beerUUID]['barUUIDs'][] = $barUUID;
+        $this->buildData['beers'][$beerUUID]['totalBars'] = count($this->buildData['beers'][$beerUUID]['barUUIDs']);
     }
 
-    public function onBeerRemovedFromBar()
+    public function onBeerRemovedFromBar(StoredEvent $storedEvent)
     {
-        // code...
+        $this->checkDate($storedEvent);
+
+        $barUUID = $storedEvent->event->attributes['bar_uuid'];
+        $beerUUID = $storedEvent->event->attributes['beer_uuid'];
+
+        // rob this is fooked. You are here.
+
+        dump($storedEvent->id);
+        dump('will unset ' . $beerUUID . ' ' . 'barUUIDs' . $barUUID);
+        dump($this->buildData['beers'][$beerUUID]['barUUIDs']);
+        $index = collect($this->buildData['beers'][$beerUUID]['barUUIDs'])->search($barUUID);
+        // dd($index);
+        unset($this->buildData['beers'][$beerUUID]['barUUIDs'][$index]);
+        dump($this->buildData['beers'][$beerUUID]['barUUIDs']);
+
+        $this->buildData['beers'][$beerUUID]['totalBars'] = count($this->buildData['beers'][$beerUUID]['barUUIDs']);
     }
 
     public function streamEventsBy(): string
     {
         return 'uuid';
+    }
+
+    private function checkDate(StoredEvent $storedEvent) : void
+    {
+        $eventDate = Carbon::parse($storedEvent->created_at);
+
+        if ($eventDate->gt($this->currentDayForData)) {
+            // start a new day
+            $this->data[] = ['dataEndsAtDate' => $this->currentDayForData, 'data' => $this->buildData];
+            $this->currentDayForData = $eventDate->endOfDay();
+        }
+    }
+
+    public function addFinalDay()
+    {
+        $this->data[] = ['dataEndsAtDate' => $this->currentDayForData, 'data' => $this->buildData];
     }
 }

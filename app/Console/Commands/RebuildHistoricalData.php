@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Carbon\Carbon;
 use Spatie\EventProjector\Facades\Projectionist;
 use App\Projectors\HistoryProjector;
+use App\HistoricData;
 
 class RebuildHistoricalData extends Command
 {
@@ -23,18 +24,6 @@ class RebuildHistoricalData extends Command
      */
     protected $description = 'Processes all the historical data for the app';
 
-    protected $targetEndDate;
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     /**
      * Execute the console command.
      *
@@ -42,22 +31,24 @@ class RebuildHistoricalData extends Command
      */
     public function handle()
     {
-        $this->targetEndDate = Carbon::parse(config('site.timeMachineStartDate'));
+        HistoricData::truncate();
 
-        $this->targetEndDate = now();
+        $this->info('Starting to rebuild historical data.');
 
-        $this->buildDataUpToDate();
-    }
-
-    public function buildDataUpToDate()
-    {
         //From: https://github.com/36864/Event-Sourced-Task-Lists/blob/b0bc7cc7dc04cffe3a3ea1f3a8a9c1706bde13ce/app/Http/Controllers/History/Controller.php#L27
         $projector = Projectionist::addProjector(HistoryProjector::class)->getProjector(HistoryProjector::class);
         $projector->reset();
-        $projector->setTargetEndDate($this->targetEndDate);
         Projectionist::replay(collect([$projector]));
+        $projector->addFinalDay();
 
-        dd(collect($projector->data['bars'])->pluck('name')->sort());
-        // return Session::get('beers', collect());
+        $this->info('Built data for ' . count($projector->data) . ' days');
+
+        collect($projector->data)->each(function ($dayData) {
+            HistoricData::create($dayData);
+        });
+
+        $lastEntry = collect($projector->data)->last()['data'];
+
+        $this->info('Done. Right now there are ' . count($lastEntry['bars']) . ' bars showing ' . count($lastEntry['beers']) . ' beers.');
     }
 }
