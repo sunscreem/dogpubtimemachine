@@ -118,13 +118,13 @@ class HistoryProjector implements Projector
 
         // rob this is fooked. You are here.
 
-        dump($storedEvent->id);
-        dump('will unset ' . $beerUUID . ' ' . 'barUUIDs' . $barUUID);
-        dump($this->buildData['beers'][$beerUUID]['barUUIDs']);
+        // dump($storedEvent->id);
+        // dump('will unset ' . $beerUUID . ' ' . 'barUUIDs' . $barUUID);
+        // dump($this->buildData['beers'][$beerUUID]['barUUIDs']);
         $index = collect($this->buildData['beers'][$beerUUID]['barUUIDs'])->search($barUUID);
         // dd($index);
         unset($this->buildData['beers'][$beerUUID]['barUUIDs'][$index]);
-        dump($this->buildData['beers'][$beerUUID]['barUUIDs']);
+        // dump($this->buildData['beers'][$beerUUID]['barUUIDs']);
 
         $this->buildData['beers'][$beerUUID]['totalBars'] = count($this->buildData['beers'][$beerUUID]['barUUIDs']);
     }

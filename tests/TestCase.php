@@ -18,25 +18,31 @@ abstract class TestCase extends BaseTestCase
                 });
     }
 
-    public function updateBar($bar)
+    public function updateBar($bar,$attributes)
     {
-      
+        $bar->updateWithAttributes(array_merge($bar->toArray(), $attributes));
     }
 
     public function createBeers($count)
     {
-        $bars = factory(Beer::class, $count)->make();
-
-            $bars->each(function ($beer) {
+        factory(Beer::class, $count)
+            ->make()
+            ->each(function ($beer) {
                 Beer::createWithAttributes($beer->setAppends([])->toArray());
             });
     }
 
     public function attachBeersToBar($bar,$beers)
     {
+        $bar->syncBeers($beers->pluck('uuid'));
     }
 
-    public function detachBeersFromBar($bar, $beers)
+    public function detachedBeerFromBar($bar, $beer)
     {
+        $beers = $bar->beers->pluck('uuid');
+        
+        $beers->forget($beers->search($beer->uuid));
+
+        $bar->syncBeers($beers);
     }
 }

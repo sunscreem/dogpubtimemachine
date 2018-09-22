@@ -14,18 +14,52 @@ class BarsAndBeersTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
-    public function it_correct_reports_new_bars_and_beers_being_added()
+    public function setup()
     {
+        Parent::setup();
 
         $this->createBars(3);
-
-        $this->assertCount(3,Bar::all());
-
+        
         $this->createBeers(3);
-
-        $this->assertCount(3, Beer::all());
 
     }
 
+    /** @test */
+    public function it_correctly_counts_new_bars_and_beers_being_added()
+    {
+        $this->assertCount(3,Bar::all());
+
+        $this->assertCount(3, Beer::all());
+    }
+
+    /** @test */
+    public function it_correctly_counts_beers_attached_to_a_bar(){
+
+        $this->assertCount(0, Bar::first()->beers);
+        
+        $this->attachBeersToBar(Bar::first(), Beer::all());
+
+        $this->assertCount(3,Bar::first()->beers);      
+    }
+
+    /** @test */
+    public function it_correctly_counts_beers_dettached_from_a_bar()
+    {
+
+        $this->attachBeersToBar(Bar::first(), Beer::all());
+        $this->assertCount(3, Bar::first()->beers);
+
+        $this->detachedBeerFromBar(Bar::first(),Beer::first());
+
+        $this->assertCount(2, Bar::first()->beers);
+    }
+
+    /** @test */
+    public function it_updates_a_bar_name(){
+
+        $this->updateBar(Bar::first(),['name'=>'New Test Name']);
+
+        $this->assertSame('New Test Name',Bar::first()->fresh()->name);
+    
+    }
 }
