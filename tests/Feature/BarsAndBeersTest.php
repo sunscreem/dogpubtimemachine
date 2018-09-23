@@ -43,13 +43,14 @@ class BarsAndBeersTest extends TestCase
     }
 
     /** @test */
-    public function it_correctly_counts_beers_dettached_from_a_bar()
+    public function it_correctly_counts_beers_detached_from_a_bar()
     {
 
         $this->attachBeersToBar(Bar::first(), Beer::all());
+
         $this->assertCount(3, Bar::first()->beers);
 
-        $this->detachedBeerFromBar(Bar::first(),Beer::first());
+        $this->detachBeerFromBar(Bar::first(),Beer::first());
 
         $this->assertCount(2, Bar::first()->beers);
     }
