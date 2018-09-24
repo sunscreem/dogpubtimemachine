@@ -33,7 +33,7 @@ class RebuildHistoricalData extends Command
     {
         HistoricData::truncate();
 
-        dump('Starting to rebuild historical data.');
+        $this->info('Starting to rebuild historical data.');
 
         //From: https://github.com/36864/Event-Sourced-Task-Lists/blob/b0bc7cc7dc04cffe3a3ea1f3a8a9c1706bde13ce/app/Http/Controllers/History/Controller.php#L27
         $projector = Projectionist::addProjector(HistoryProjector::class)->getProjector(HistoryProjector::class);
@@ -41,7 +41,7 @@ class RebuildHistoricalData extends Command
         Projectionist::replay(collect([$projector]));
         $projector->addFinalDay();
 
-        dump('Built data for ' . count($projector->data) . ' days');
+        $this->info('Built data for ' . count($projector->data) . ' days');
 
         collect($projector->data)->each(function ($dayData) {
             if (!$dayData['data']) { return; }
@@ -50,6 +50,6 @@ class RebuildHistoricalData extends Command
 
         $lastEntry = collect($projector->data)->last()['data'];
 
-        dump('Done. Right now there are ' . count($lastEntry['bars']) . ' bars showing ' . count($lastEntry['beers']) . ' beers.');
+        $this->info('Done. Right now there are ' . count($lastEntry['bars']) . ' bars showing ' . count($lastEntry['beers']) . ' beers.');
     }
 }

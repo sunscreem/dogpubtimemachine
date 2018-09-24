@@ -4,34 +4,32 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Bar;
 use Spatie\EventProjector\Models\StoredEvent;
 use App\Beer;
 use App\HistoricData;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class HistoryDataTest extends TestCase
 {
-    use RefreshDatabase;
 
-    protected $allHistoricData;
+    use DatabaseMigrations;
 
+    // use RefreshDatabase; <-- doesnt work with a mysql db and uuids by the looks of it. Sigh.
+    
     public function setup()
     {
         Parent::setup();
 
-        dump('creating dummy data for -2 days ago');
         $this->setDate(now()->subDay(2));
         $this->createBars(2);
         $this->createBeers(2);
         $this->attachBeersToBar(Bar::first(), Beer::all());
 
-        dump('creating dummy data for yesterday');
         $this->setDate(now()->subDay(1));
         $newBeer = $this->createBeers(1)->first();
         $this->attachBeersToBar(Bar::first(), $newBeer);
 
-        dump('creating dummy data for today');
         $this->setDate(null); // now
         $this->createBars(1);
         $this->createBeers(1);
@@ -39,17 +37,10 @@ class HistoryDataTest extends TestCase
        
         $this->updateBar(Bar::first(), ['name' => 'New Test Name']);
 
-        // dd('');
-        // ok rob - fuck knows whats happening. Why is the beer detached event now not showing up?
-        dd(StoredEvent::select('created_at','event_class')->get()->toArray());
-
-        $this->artisan('data:rebuild'); // speed things up a bit.. just run the rebuild once.
-
-        $this->allHistoricData = HistoricData::all();
-   
+        dump('at there start there are:' . StoredEvent::count());
     }
 
-    /** @test */
+   /** @test */
     public function it_should_be_reporting_the_test_setup_counts_correctly(){
     
         // we've already covered this in another test but 
@@ -68,12 +59,16 @@ class HistoryDataTest extends TestCase
     /** @test */
     public function it_produces_a_history_containing_three_days(){
 
-        $this->assertCount(3, $this->allHistoricData);
+        $this->artisan('data:rebuild');
+
+        $this->assertCount(3, HistoricData::all());
     
     }
 
     /** @test */
     public function it_shows_the_correct_number_of_bars_and_beers_for_two_days_ago(){
+
+        $this->artisan('data:rebuild');
 
         $data = HistoricData::find(1)->data;
 
@@ -93,12 +88,13 @@ class HistoryDataTest extends TestCase
     /** @test */
     public function it_shows_the_correct_number_of_bars_and_beers_for_yesterday()
     {
+        $this->artisan('data:rebuild');
 
         $data = HistoricData::find(2)->data;
 
         $this->assertCount(2, $data['bars']);
 
-        $this->assertCount(3, $data['beers']);
+        $this->assertCount(2, $data['beers']);
 
         $firstBeer = collect($data['beers'])->first();
         $firstBar = collect($data['bars'])->first();
@@ -113,18 +109,20 @@ class HistoryDataTest extends TestCase
     public function it_shows_the_correct_number_of_bars_and_beers_for_today()
     {
 
+        $this->artisan('data:rebuild');
+
         $data = HistoricData::find(3)->data;
         
+        dump('here there are:'.StoredEvent::count());
+
         $this->assertCount(3, $data['bars']);
 
-        $this->assertCount(3, $data['beers']);
+        $this->assertCount(2, $data['beers']);
 
         $firstBeer = collect($data['beers'])->first();
         $firstBar = collect($data['bars'])->first();
 
         $this->assertSame('New Test Name', $firstBar['name']);
-
-        dd($firstBar['uuid'],$firstBeer['barUUIDs']);
 
         $this->assertSame($firstBar['uuid'], $firstBeer['barUUIDs'][0]);
 

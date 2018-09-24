@@ -59,12 +59,8 @@ abstract class TestCase extends BaseTestCase
     {
         $beers = $bar->beers->pluck('uuid');
     
-        dump($beers);
-
         $beers->forget($beers->search($beer->uuid));
 
-        dump($beers);
-        
         $lastIDofStoredEvents = StoredEvent::latest('id')->first()->id;
 
         $bar->syncBeers($beers);
