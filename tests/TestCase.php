@@ -36,11 +36,12 @@ abstract class TestCase extends BaseTestCase
 
     public function createBeers($count)
     {
-        factory(Beer::class, $count)
+       return factory(Beer::class, $count)
             ->make()
-            ->each(function ($beer) {
-                Beer::createWithAttributes($beer->setAppends([])->toArray());
+            ->map(function ($beer) {
+                $newBeer = Beer::createWithAttributes($beer->setAppends([])->toArray());
                 $this->updateStoredEventDate();
+                return $newBeer;
             });
     }
 
@@ -57,9 +58,13 @@ abstract class TestCase extends BaseTestCase
     public function detachBeerFromBar($bar, $beer)
     {
         $beers = $bar->beers->pluck('uuid');
-        
+    
+        dump($beers);
+
         $beers->forget($beers->search($beer->uuid));
 
+        dump($beers);
+        
         $lastIDofStoredEvents = StoredEvent::latest('id')->first()->id;
 
         $bar->syncBeers($beers);

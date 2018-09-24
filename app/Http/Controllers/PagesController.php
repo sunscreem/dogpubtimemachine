@@ -17,6 +17,9 @@ class PagesController extends Controller
 
         $beers = Beer::select('name', 'brewery', 'uuid')
                        ->get()
+                        ->filter(function ($value) {
+                            return $value->totalBars;
+                        })
                        ->sortByDesc('totalBars')
                        ->values();
      

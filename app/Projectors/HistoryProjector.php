@@ -23,6 +23,8 @@ class HistoryProjector implements Projector
     public $buildData;
     public $data = [];
 
+    protected $allKnownBeers;
+
     public function __construct()
     {
         $this->currentDayForData = Carbon::parse(config('site.timeMachineStartDate'))->endOfDay();
@@ -50,9 +52,10 @@ class HistoryProjector implements Projector
 
         $beer = $storedEvent->event->beerAttributes;
 
-        // dump("A new beer has been added: {$storedEvent->event->beerAttributes['name']} by {$storedEvent->event->beerAttributes['brewery']}");
+        dump("A new beer has been added: {$storedEvent->event->beerAttributes['name']} by {$storedEvent->event->beerAttributes['brewery']}");
 
-        $this->buildData['beers'][$beer['uuid']] = $beer;
+        $this->allKnownBeers[$beer['uuid']] = $beer;
+        // $this->buildData['beers'][$beer['uuid']] = $beer;
         // $beers = Session::get('beers', collect());
 
         // $beers->push(new Beer($storedEvent->event->beerAttributes));
@@ -64,7 +67,7 @@ class HistoryProjector implements Projector
     {
         $this->checkDate($storedEvent);
 
-        // dump("A new bar has been added: {$storedEvent->event->barAttributes['name']}");
+        dump("A new bar has been added: {$storedEvent->event->barAttributes['name']}");
 
         $bar = $storedEvent->event->barAttributes;
 
@@ -80,7 +83,7 @@ class HistoryProjector implements Projector
     {
         $this->checkDate($storedEvent);
 
-        // dump("A bar has been updated: {$storedEvent->event->barAttributes['name']}");
+        dump("A bar has been updated: {$storedEvent->event->barAttributes['name']}");
 
         $bar = $storedEvent->event->barAttributes;
 
@@ -102,9 +105,12 @@ class HistoryProjector implements Projector
     {
         $this->checkDate($storedEvent);
 
+        dump("Attaching beer to a bar.");
+
         $barUUID = $storedEvent->event->attributes['bar_uuid'];
         $beerUUID = $storedEvent->event->attributes['beer_uuid'];
 
+        $this->buildData['beers'][$beerUUID] = $this->allKnownBeers[$beerUUID];
         $this->buildData['beers'][$beerUUID]['barUUIDs'][] = $barUUID;
         $this->buildData['beers'][$beerUUID]['totalBars'] = count($this->buildData['beers'][$beerUUID]['barUUIDs']);
     }
@@ -113,9 +119,13 @@ class HistoryProjector implements Projector
     {
         $this->checkDate($storedEvent);
 
+        dump("Detaching a beer from a bar.");
+
+        
         $barUUID = $storedEvent->event->attributes['bar_uuid'];
         $beerUUID = $storedEvent->event->attributes['beer_uuid'];
-
+        
+        dump("Should be away to detach ". $beerUUID." from ". $barUUID);
         // rob this is fooked. You are here.
 
         // dump($storedEvent->id);
@@ -124,9 +134,15 @@ class HistoryProjector implements Projector
         $index = collect($this->buildData['beers'][$beerUUID]['barUUIDs'])->search($barUUID);
         // dd($index);
         unset($this->buildData['beers'][$beerUUID]['barUUIDs'][$index]);
-        // dump($this->buildData['beers'][$beerUUID]['barUUIDs']);
+        // dd($this->buildData['beers'][$beerUUID]['barUUIDs']);
 
-        $this->buildData['beers'][$beerUUID]['totalBars'] = count($this->buildData['beers'][$beerUUID]['barUUIDs']);
+        $newBarsCount = count($this->buildData['beers'][$beerUUID]['barUUIDs']);
+
+        $this->buildData['beers'][$beerUUID]['totalBars'] = $newBarsCount;
+
+        if (!$newBarsCount) {
+            unset($this->buildData['beers'][$beerUUID]);
+        }
     }
 
     public function streamEventsBy(): string
@@ -138,15 +154,31 @@ class HistoryProjector implements Projector
     {
         $eventDate = Carbon::parse($storedEvent->created_at);
 
+        dump('Event date is '. $eventDate->toDateTimeString());
+
         if ($eventDate->gt($this->currentDayForData)) {
             // start a new day
-            $this->data[] = ['dataEndsAtDate' => $this->currentDayForData, 'data' => $this->buildData];
+            dump('New event date spotted.');
+            if (!$this->buildData) { 
+                dump('no data found for this day so moving on.'); 
+            }
+            else {
+                dump('Storing data for '. $this->currentDayForData->toDateTimeString());
+                $this->data[] = ['dataEndsAtDate' => $this->currentDayForData, 'data' => $this->buildData];
+            }
+            dump('And setting new date of '. $eventDate->endOfDay()->toDateTimeString());
             $this->currentDayForData = $eventDate->endOfDay();
         }
     }
 
     public function addFinalDay()
     {
+        if (!$this->buildData) {
+            dump('no data found for final day.');
+            return; 
+        }
+        
+        dump('Storing data for ' . $this->currentDayForData->toDateTimeString());
         $this->data[] = ['dataEndsAtDate' => $this->currentDayForData, 'data' => $this->buildData];
     }
 }

@@ -69,4 +69,5 @@ class Beer extends Model
     {
         return static::where('uuid', $uuid)->first();
     }
+
 }

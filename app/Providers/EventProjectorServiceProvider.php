@@ -21,6 +21,7 @@ class EventProjectorServiceProvider extends ServiceProvider
         Projectionist::addProjectors([BarsProjector::class,
                                         BeersProjector::class,
                                         BarsBeersProjector::class,
-                                        HistoryProjector::class, ]);
+        ]);
+                                       
     }
 }
