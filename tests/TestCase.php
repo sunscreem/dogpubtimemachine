@@ -20,10 +20,11 @@ abstract class TestCase extends BaseTestCase
 
     public function createBars($count)
     {
-        $bars = factory(Bar::class, $count)->make()
-                ->each(function ($bar) {
-                    Bar::createWithAttributes($bar->toArray());
+        return factory(Bar::class, $count)->make()
+                ->map(function ($bar) {
+                    $newBar = Bar::createWithAttributes($bar->toArray());
                     $this->updateStoredEventDate();
+                    return $newBar;
                 });
     }
 
@@ -48,7 +49,8 @@ abstract class TestCase extends BaseTestCase
     public function attachBeersToBar($bar,$beers)
     {
         $lastIDofStoredEvents = StoredEvent::latest('id')->first()->id;
-        
+
+        dump('away to add these beers'. $beers->pluck('uuid'));
         $bar->syncBeers($beers->pluck('uuid'));
 
         $this->updateStoredEventDate($lastIDofStoredEvents);
@@ -58,8 +60,12 @@ abstract class TestCase extends BaseTestCase
     public function detachBeerFromBar($bar, $beer)
     {
         $beers = $bar->beers->pluck('uuid');
-    
+
+        dump($beers);
+
         $beers->forget($beers->search($beer->uuid));
+
+        dump($beers);
 
         $lastIDofStoredEvents = StoredEvent::latest('id')->first()->id;
 

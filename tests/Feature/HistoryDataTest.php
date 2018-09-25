@@ -22,31 +22,30 @@ class HistoryDataTest extends TestCase
         Parent::setup();
 
         $this->setDate(now()->subDay(2));
-        $this->createBars(2);
-        $this->createBeers(2);
-        $this->attachBeersToBar(Bar::first(), Beer::all());
+        $newBars = $this->createBars(2);
+        $newBeers = $this->createBeers(2);
+        dump($newBeers->pluck('uuid'));
+        // dump($newBars->first()->beers);
+        $this->attachBeersToBar($newBars->first(), $newBeers);
 
         $this->setDate(now()->subDay(1));
         $newBeer = $this->createBeers(1)->first();
-        $this->attachBeersToBar(Bar::first(), $newBeer);
+        dump($newBeer->uuid);
+        $this->attachBeersToBar($newBars->first(), $newBeer);
 
         $this->setDate(null); // now
         $this->createBars(1);
         $this->createBeers(1);
-        $this->detachBeerFromBar(Bar::first(), $newBeer);
+        $this->detachBeerFromBar($newBars->first(), $newBeer);
        
-        $this->updateBar(Bar::first(), ['name' => 'New Test Name']);
+        $this->updateBar($newBars->first(), ['name' => 'New Test Name']);
 
-        dump('at there start there are:' . StoredEvent::count());
+        dd('at there start there are:' . StoredEvent::count());
     }
 
    /** @test */
     public function it_should_be_reporting_the_test_setup_counts_correctly(){
     
-        // we've already covered this in another test but 
-        // lets get an error right  here if the test data
-        // gets changed as the app grows
-
         $this->assertCount(3, Bar::all());
 
         $this->assertCount(4, Beer::all());
@@ -54,6 +53,8 @@ class HistoryDataTest extends TestCase
         $this->assertSame('New Test Name', Bar::first()->fresh()->name);
 
         $this->assertCount(2, Bar::first()->beers);
+
+        $this->assertCount(12,StoredEvent::all());
     }
 
     /** @test */
