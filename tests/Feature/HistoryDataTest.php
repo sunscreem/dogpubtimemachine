@@ -13,34 +13,39 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 class HistoryDataTest extends TestCase
 {
 
+    // use RefreshDatabase; <-- doesnt work with a mysql db and uuids by the looks of it. Sigh.
     use DatabaseMigrations;
 
-    // use RefreshDatabase; <-- doesnt work with a mysql db and uuids by the looks of it. Sigh.
+    protected $firstBar;
+
+    protected $firstBeer;
+
     
     public function setup()
     {
         Parent::setup();
 
+        // our test data
+        // two days ago - create 2 bars, create 2 beers, attached those beers to the first bar.
         $this->setDate(now()->subDay(2));
         $newBars = $this->createBars(2);
         $newBeers = $this->createBeers(2);
-        dump($newBeers->pluck('uuid'));
-        // dump($newBars->first()->beers);
-        $this->attachBeersToBar($newBars->first(), $newBeers);
+        $this->firstBar = $newBars->first();
+        $this->firstBeer = $newBeers->first();
+        $this->attachBeersToBar($this->firstBar, $newBeers);
 
+        // yesterday - create 1 beer, attach it to that same first bar
         $this->setDate(now()->subDay(1));
         $newBeer = $this->createBeers(1)->first();
-        dump($newBeer->uuid);
-        $this->attachBeersToBar($newBars->first(), $newBeer);
+        $this->attachBeersToBar($this->firstBar, $newBeer);
 
+        // today - remove the beer we added yesterday and update the bars name
         $this->setDate(null); // now
         $this->createBars(1);
         $this->createBeers(1);
-        $this->detachBeerFromBar($newBars->first(), $newBeer);
-       
-        $this->updateBar($newBars->first(), ['name' => 'New Test Name']);
+        $this->detachBeerFromBar($this->firstBar, $newBeer);
+        $this->updateBar($this->firstBar, ['name' => 'New Test Name']);
 
-        dd('at there start there are:' . StoredEvent::count());
     }
 
    /** @test */
@@ -50,9 +55,9 @@ class HistoryDataTest extends TestCase
 
         $this->assertCount(4, Beer::all());
 
-        $this->assertSame('New Test Name', Bar::first()->fresh()->name);
+        $this->assertSame('New Test Name', $this->firstBar->fresh()->name);
 
-        $this->assertCount(2, Bar::first()->beers);
+        $this->assertCount(2, $this->firstBar->fresh()->beers);
 
         $this->assertCount(12,StoredEvent::all());
     }
@@ -76,9 +81,9 @@ class HistoryDataTest extends TestCase
         $this->assertCount(2, $data['bars']);
 
         $this->assertCount(2, $data['beers']);
-
-        $firstBeer = collect($data['beers'])->first();
-        $firstBar = collect($data['bars'])->first();
+     
+        $firstBeer = $data['beers'][$this->firstBeer->uuid];
+        $firstBar = $data['bars'][$this->firstBar->uuid];
 
         $this->assertNotSame('New Test Name', $firstBar['name']);
 
@@ -95,10 +100,10 @@ class HistoryDataTest extends TestCase
 
         $this->assertCount(2, $data['bars']);
 
-        $this->assertCount(2, $data['beers']);
+        $this->assertCount(3, $data['beers']);
 
-        $firstBeer = collect($data['beers'])->first();
-        $firstBar = collect($data['bars'])->first();
+        $firstBeer = $data['beers'][$this->firstBeer->uuid];
+        $firstBar = $data['bars'][$this->firstBar->uuid];
 
         $this->assertNotSame('New Test Name', $firstBar['name']);
 
@@ -114,14 +119,12 @@ class HistoryDataTest extends TestCase
 
         $data = HistoricData::find(3)->data;
         
-        dump('here there are:'.StoredEvent::count());
-
         $this->assertCount(3, $data['bars']);
 
         $this->assertCount(2, $data['beers']);
 
-        $firstBeer = collect($data['beers'])->first();
-        $firstBar = collect($data['bars'])->first();
+        $firstBeer = $data['beers'][$this->firstBeer->uuid];
+        $firstBar = $data['bars'][$this->firstBar->uuid];
 
         $this->assertSame('New Test Name', $firstBar['name']);
 

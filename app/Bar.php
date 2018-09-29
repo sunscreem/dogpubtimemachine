@@ -60,7 +60,7 @@ class Bar extends Model
     public function syncBeers(Collection $beers): array
     {
         $beers = $beers->toArray();
-        $current = $this->beers->pluck('uuid')->toArray();
+        $current = $this->fresh()->beers->pluck('uuid')->toArray();
 
         $toBeAttached = collect(array_diff($beers, $current))->unique(); //unique as sometimes bars accidentally have a beer on twice
 
