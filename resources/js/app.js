@@ -57,6 +57,11 @@ const app = new Vue({
   
   methods: {
     dateChanged(selectedDate) {
+      let now = new Date();
+      if (selectedDate.toDateString() == now.toDateString()) {
+        this.selectedDate = null;
+        return
+      }
       this.selectedDate = selectedDate;
     }
   }

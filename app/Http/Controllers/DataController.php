@@ -18,11 +18,17 @@ class DataController extends Controller
         // dump($data);
 
         $bars = collect($data['bars'])
-             ->sortby('name');
+             ->sortby('name')
+             ->values();
 
+        
 
         $beers = collect($data['beers'])
                 ->sortByDesc('totalBars')
+                ->map(function($beer){
+                    $beer['barUUIDs'] = collect($beer['barUUIDs'])->values();
+                    return $beer;
+                })
                 ->values();
 
         return compact('beers', 'bars');

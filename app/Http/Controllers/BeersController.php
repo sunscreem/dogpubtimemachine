@@ -35,7 +35,7 @@ class BeersController extends Controller
     {
         dd(request('d'));
 
-        return HistoricData::where('dataEndsAtDate',request(d))
+        return HistoricData::where('dataEndsAtDate',request(d));
         // //From: https://github.com/36864/Event-Sourced-Task-Lists/blob/b0bc7cc7dc04cffe3a3ea1f3a8a9c1706bde13ce/app/Http/Controllers/History/Controller.php#L27
         // $projector = Projectionist::addProjector(HistoryProjector::class)->getProjector(HistoryProjector::class);
         // $projector->reset();
