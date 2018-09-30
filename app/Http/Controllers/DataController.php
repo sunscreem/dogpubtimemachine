@@ -15,16 +15,12 @@ class DataController extends Controller
         
         $data = HistoricData::where('dataEndsAtDate', Carbon::parse(request('date'))->endOfDay())->first()->data;
 
-        // dump($data);
-
         $bars = collect($data['bars'])
              ->sortby('name')
              ->values();
 
-        
-
         $beers = collect($data['beers'])
-                ->sortByDesc('totalBars')
+                ->sortByDesc('bars_count')
                 ->map(function($beer){
                     $beer['barUUIDs'] = collect($beer['barUUIDs'])->values();
                     return $beer;

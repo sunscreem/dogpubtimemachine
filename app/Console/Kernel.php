@@ -24,7 +24,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('brewdog:fetch')->everyMinute();
-        //          ->hourly();
+
+        $schedule->command('data:rebuild')->dailyAt('00:01');
     }
 
     /**
