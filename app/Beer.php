@@ -18,7 +18,7 @@ class Beer extends Model
 
     protected $guarded = [];
 
-    protected $appends = ['totalBars', 'barUUIDs'];
+    protected $appends = ['barUUIDs'];
 
     protected $hidden = ['bars', 'created_at', 'updated_at'];
 
@@ -57,10 +57,10 @@ class Beer extends Model
         return $this->bars->pluck('uuid');
     }
 
-    public function getTotalBarsAttribute()
-    {
-        return $this->bars()->count();
-    }
+    // public function getTotalBarsAttribute()
+    // {
+    //     return $this->bars()->count();
+    // }
 
     /*
      * A helper method to quickly retrieve a beer by uuid.

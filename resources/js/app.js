@@ -25,9 +25,12 @@ smoothscroll.polyfill();
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+Vue.component('beers', require('./components/Beers.vue'));
 Vue.component('beer', require('./components/Beer.vue'));
+Vue.component('bars', require('./components/Bars.vue'));
 Vue.component('bar', require('./components/Bar.vue'));
 
+Vue.component('headers', require('./components/Headers.vue'));
 Vue.component('time-machine', require('./components/TimeMachine.vue'));
 Vue.component('system-status', require('./components/Status.vue'));
 
@@ -48,23 +51,6 @@ bugsnagClient.use(bugsnagVue(Vue));
 
 const app = new Vue({
   el: '#app',
-
-  data() {
-    return {
-      selectedDate: null
-    }
-  },
-  
-  methods: {
-    dateChanged(selectedDate) {
-      let now = new Date();
-      if (selectedDate.toDateString() == now.toDateString()) {
-        this.selectedDate = null;
-        return
-      }
-      this.selectedDate = selectedDate;
-    }
-  }
 });
 
 

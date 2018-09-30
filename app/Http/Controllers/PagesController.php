@@ -11,20 +11,26 @@ class PagesController extends Controller
 {
     public function index()
     {
+        // \DB::listen(function ($sql,$bindings,$time) {
+        //     var_dump($sql);
+        //     var_dump($time);
+        // });
+
         $bars = Bar::select('name', 'uuid')
                 ->orderBy('name')
                 ->get();
 
         $beers = Beer::select('name', 'brewery', 'uuid')
+                        ->withCount('bars')
+                        ->having('bars_count','>',0)
                        ->get()
-                        ->filter(function ($value) {
-                            return $value->totalBars;
-                        })
-                       ->sortByDesc('totalBars')
+                       ->sortByDesc('bars_count')
                        ->values();
      
         $initialData = ['beers' => $beers,
                         'bars' => $bars];
+
+        // $initialData = null;
 
         return view('homepage', compact('initialData'));
     }

@@ -72,8 +72,13 @@
             },
             dateSelected(){
                 this.changingDate = false;
+                let now = new Date();
                 this.$nextTick()
                  .then(()=>{ 
+                     if (this.selectedDate.toDateString() == now.toDateString()) {
+                        this.$emit('date-changed',null);
+                        return;
+                     }
                      this.dateToShow = this.formatDate(this.selectedDate);  
                      this.$emit('date-changed',this.selectedDate);
                 });

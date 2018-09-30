@@ -1,6 +1,6 @@
 <template>
     <div>
-        <a @click="showBars" class="link">{{ beer.name }} / {{ beer.brewery }} / {{ totalBars }}</a>
+        <a @click="showBars" class="link">{{ beer.name }} / {{ beer.brewery }} / {{ beersCount }}</a>
     </div>
 </template>
 
@@ -9,8 +9,8 @@
         props: ['beer'],
 
         computed: {
-            totalBars: function() {
-                return this.beer.totalBars + ' bar' + (this.beer.totalBars > 1 ? 's' : '') ;
+            beersCount: function() {
+                return this.beer.bars_count + ' bar' + (this.beer.bars_count > 1 ? 's' : '') ;
             }
         },
 
