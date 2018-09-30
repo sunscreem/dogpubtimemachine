@@ -98,7 +98,7 @@ class HistoryProjector implements Projector
         $this->buildData['beers'][$beerUUID]['uuid'] = $this->allKnownBeers[$beerUUID]['uuid'];
         $this->buildData['beers'][$beerUUID]['brewery'] = $this->allKnownBeers[$beerUUID]['brewery'];
         $this->buildData['beers'][$beerUUID]['barUUIDs'][] = $barUUID;
-        $this->buildData['beers'][$beerUUID]['totalBars'] = count($this->buildData['beers'][$beerUUID]['barUUIDs']);
+        $this->buildData['beers'][$beerUUID]['bars_count'] = count($this->buildData['beers'][$beerUUID]['barUUIDs']);
 
         // dump(count($this->buildData['beers'][$beerUUID]['barUUIDs']));
 
@@ -129,12 +129,12 @@ class HistoryProjector implements Projector
         
         $index = collect($this->buildData['beers'][$beerUUID]['barUUIDs'])->search($barUUID);
         unset($this->buildData['beers'][$beerUUID]['barUUIDs'][$index]);
-        $this->buildData['beers'][$beerUUID]['totalBars'] = count($this->buildData['beers'][$beerUUID]['barUUIDs']);
+        $this->buildData['beers'][$beerUUID]['bars_count'] = count($this->buildData['beers'][$beerUUID]['barUUIDs']);
 
 
         $newBarsCount = count($this->buildData['beers'][$beerUUID]['barUUIDs']);
 
-        $this->buildData['beers'][$beerUUID]['totalBars'] = $newBarsCount;
+        $this->buildData['beers'][$beerUUID]['bars_count'] = $newBarsCount;
 
         if (!$newBarsCount) {
             unset($this->buildData['beers'][$beerUUID]);
