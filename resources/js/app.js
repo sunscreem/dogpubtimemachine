@@ -36,6 +36,16 @@ Vue.component('system-status', require('./components/Status.vue'));
 
 Vue.component('date-change', require('./components/DateChange.vue'));
 
+Vue.filter('formatDate',function formatDate(date) {
+  // this could be done better
+  const formattedDate = ('0' + date.getDate()).slice(-2) + '/'
+    + ('0' + (date.getMonth() + 1)).slice(-2) + '/'
+    + date.getFullYear()
+  return formattedDate
+});
+
+Vue.prototype.$filters = Vue.options.filters;
+
 require('es6-promise').polyfill();
 
 const bugsnag = require('bugsnag-js');

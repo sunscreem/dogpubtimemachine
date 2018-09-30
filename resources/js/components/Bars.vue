@@ -15,11 +15,14 @@
 <script>
 export default {
     
-    props: ['barsToShow'],
+    props: ['barsToShow','selectedBeer','selectedDate'],
 
     computed: {
             barsHeaderText: function() {
-                return 'header text';
+                let headerText = this.selectedBeer.name + ' by ' + this.selectedBeer.brewery;
+                if (this.selectedDate) { headerText += ' on '+ this.$filters.formatDate(this.selectedDate) +' was on tap in '; } else { headerText += ' now on tap in '; }
+                headerText += this.barsToShow.length + ' Brewdog bar' + (this.barsToShow.length !== 1 ? 's' : '') + ':';
+                return headerText;
             }
         },
 

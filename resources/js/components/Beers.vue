@@ -16,16 +16,25 @@
 export default {
     data() {
       return {
-        beerHeaderText: null,//'There are ' + this.initialData.beers.length + ' beers on tap. Click on a beer...',
-        barsHeaderText: null,
-        // beers: this.initialData.beers,
+          barsHeaderText: null,
       }
     },
 
-    props: ['beers'],
+    props: ['beers','selectedDate'],
+
+    computed: {
+        beerHeaderText: function() {
+            if (!this.beers.length ) { return 'Loading...'; }
+            let headerText = 'There ';
+            if (this.selectedDate) { headerText += 'were '; } else { headerText += 'are '; }
+            headerText += this.beers.length + ' beers on tap';
+            if (this.selectedDate) { headerText += ' on '+this.$filters.formatDate(this.selectedDate); } 
+            headerText += ':';
+            return headerText;
+        }
+    },
 
     methods: {
-
         showBarsForBeer(beer) {
             this.$emit('showBars',beer);
         }

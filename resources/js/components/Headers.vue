@@ -31,21 +31,10 @@ export default {
     
     props: ['selectedDate','onTapCount','barsCount','timeMachineStartsDate'],
 
-    filters: {
-        formatDate(date) {
-            // this could be done better
-            const formattedDate = ('0' + date.getDate()).slice(-2) + '/'
-                                + ('0' + (date.getMonth()+1)).slice(-2) + '/'
-                                + date.getFullYear()
-            return formattedDate
-        },
-    },
-
     methods: {
         dateChanged(selectedDate) {
             this.$emit('date-changed',selectedDate);
         },
-        
     }
 
 }
