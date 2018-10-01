@@ -60,12 +60,10 @@
         }
         this.beersForCurrentDate = this.initialData.beers;
         this.barsForCurrentDate = this.initialData.bars;
-      
+        this.checkIfQueryStringBeerCanBeViewed();      
     },
 
     methods: {
-
-      
 
       dateChanged(selectedDate) {
 
@@ -74,30 +72,27 @@
         if (!selectedDate){
              this.beersForCurrentDate = this.initialData.beers; 
              this.barsForCurrentDate =this.initialData.bars;
-             this.$router.push({ query: {}});
-            return;
+
+             let newQueryString = Object.assign({},this.$route.query);
+             delete newQueryString.d;
+             this.$router.push({ query: newQueryString});
+             
+             this.checkIfQueryStringBeerCanBeViewed(); 
+             return;
         }
-
-        this.$router.push({ query: {d:this.selectedDate.toJSON()}});
+        this.$router.push({ query: Object.assign({}, this.$route.query, { d: this.selectedDate.toJSON() }) });
         this.fetchDataForDate();
-
-
       },
       
       fetchDataForDate(){
-
         
         this.beersForCurrentDate = this.barsForCurrentDate = this.barsToShow = [];
-
-
-      
-
 
         axios.get(route('api.data'),{ params: { date: this.selectedDate.toJSON() } })
         .then((response) => {
             this.beersForCurrentDate = response.data.beers;
             this.barsForCurrentDate = response.data.bars;
-            
+            this.checkIfQueryStringBeerCanBeViewed();              
          })
           .catch(error => {
               let errorText = (error.status ? error.response.statusText : error);
@@ -111,9 +106,23 @@
 
       showBarsForBeer(beer) {
 
+          this.$router.push({ query: Object.assign({}, this.$route.query, { b: this.$slug(beer.name+' '+beer.brewery).toLowerCase() }) });
+        
           this.barsToShow = this.barsForCurrentDate.filter(bar => beer.barUUIDs.includes(bar.uuid));
           this.selectedBeer = beer;
           
+      },
+
+      checkIfQueryStringBeerCanBeViewed() {
+
+          let foundBeer = this.beersForCurrentDate.find((beer)=>{
+              if (this.$slug(beer.name+' '+beer.brewery).toLowerCase() == this.$route.query.b) { return true; }
+          });
+
+          if (!foundBeer) { return; }
+
+          this.showBarsForBeer(foundBeer);
+
       }
     },
   }
