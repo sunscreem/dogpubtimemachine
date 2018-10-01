@@ -61,6 +61,8 @@
         axios.get(route('api.data'),{ params: { date: this.selectedDate.toJSON() } })
         .then((response) => {
             this.beersForCurrentDate = response.data.beers;
+            this.barsForCurrentDate = response.data.bars;
+            
          })
           .catch(error => {
               let errorText = (error.status ? error.response.statusText : error);
