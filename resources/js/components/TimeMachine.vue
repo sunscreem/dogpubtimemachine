@@ -56,7 +56,13 @@
       dateChanged(selectedDate) {
 
         this.selectedDate = selectedDate;
-        this.beersForCurrentDate = this.bars = [];
+        
+        if (!selectedDate){
+             this.beersForCurrentDate = this.initialData.beers; 
+             this.barsForCurrentDate =this.initialData.bars;
+            return;
+        }
+        this.beersForCurrentDate = this.barsForCurrentDate = this.barsToShow = [];
 
         axios.get(route('api.data'),{ params: { date: this.selectedDate.toJSON() } })
         .then((response) => {

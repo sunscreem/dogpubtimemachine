@@ -6,7 +6,8 @@
           </div>
           <div class="card-body bars" >
             <div v-for="bar in barsToShow">
-              <bar :bar="bar"></bar>
+              <bar  :bar="bar"
+                    :selectedDate="selectedDate"></bar>
             </div>
           </div>
         </div>

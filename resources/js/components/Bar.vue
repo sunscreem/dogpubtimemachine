@@ -7,15 +7,16 @@
 <script>
   export default {
 
-    data() {
-      return {}
-    },
+    props: ['bar','selectedDate'],
 
     computed: {
       tooltip() {
-        let tip = 'Last Checked: ' + this.bar.lastChecked + '<br>';
-        tip += 'Tap List Updated: ' + this.bar.tapListLastUpdated;
-        tip += '<br><a target="_blank" rel="noopener noreferrer" href="'+ this.bar.brewdog_site_listing_url + '">Visit Website</a>';
+        let tip = '';
+        if (!this.selectedDate) {
+          tip += 'Last Checked: ' + this.bar.lastChecked + '<br>';
+          tip += 'Tap List Updated: ' + this.bar.tapListLastUpdated + '<br>';
+        }
+        tip += '<a target="_blank" rel="noopener noreferrer" href="'+ this.bar.brewdog_site_listing_url + '">Visit Website</a>';
         return {
           content: tip,
           trigger: 'click'
@@ -23,7 +24,6 @@
       }
     },
 
-    props: ['bar']
   }
 </script>
 
