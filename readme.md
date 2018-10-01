@@ -8,7 +8,7 @@
 
 # Note To Developers
 
-This project is built using Laravel 5.6. You will need to run `composer install` to see anything.
+This project is built using Laravel 5.7. You will need to run `composer install` to see anything.
 
 Assets are compiled during deployment, so to make it look correct for yourself you will need to `npm install` then `npm run development`.
 
@@ -24,9 +24,7 @@ Hopefully this will lead to showing some cool stats.
 
 #### Why is called a "Time Machine?"
 
-The idea is you'll be able to wind back the clock and see what bars had what beer on in the past.
-
-Obviously thats not working... yet.
+You are able to wind back the clock and see what bars had what beer on in the past!
 
 #### It looks awful - is there some sort of to-do list for fixing it?
 
