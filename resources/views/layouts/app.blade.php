@@ -8,6 +8,7 @@
          @yield('content')
     </div>
      @include('layouts.partials.footer')
+     @include('layouts.partials.footer-tags-and-scripts')
 </body>
 </html>
 
