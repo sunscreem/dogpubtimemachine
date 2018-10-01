@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+
       <headers :selectedDate="selectedDate"
                :onTapCount="beersForCurrentDate.length"
                :barsCount="barsForCurrentDate.length"
@@ -43,15 +44,28 @@
       return {
         selectedDate: null,
         selectedBeer: null,
-        beersForCurrentDate: this.initialData.beers,
-        barsForCurrentDate: this.initialData.bars,
+        beersForCurrentDate: [],
+        barsForCurrentDate: [],
         barsToShow: [],
       }
     },
 
     props: ['initialData','timeMachineStartsDate'],
 
+    mounted(){
+        if (this.$route.query.d) {
+            this.selectedDate = new Date(this.$route.query.d);
+            this.fetchDataForDate();
+            return;
+        }
+        this.beersForCurrentDate = this.initialData.beers;
+        this.barsForCurrentDate = this.initialData.bars;
+      
+    },
+
     methods: {
+
+      
 
       dateChanged(selectedDate) {
 
@@ -60,9 +74,24 @@
         if (!selectedDate){
              this.beersForCurrentDate = this.initialData.beers; 
              this.barsForCurrentDate =this.initialData.bars;
+             this.$router.push({ query: {}});
             return;
         }
+
+        this.$router.push({ query: {d:this.selectedDate.toJSON()}});
+        this.fetchDataForDate();
+
+
+      },
+      
+      fetchDataForDate(){
+
+        
         this.beersForCurrentDate = this.barsForCurrentDate = this.barsToShow = [];
+
+
+      
+
 
         axios.get(route('api.data'),{ params: { date: this.selectedDate.toJSON() } })
         .then((response) => {
@@ -76,8 +105,10 @@
                    title: 'Something went wrong!',
                    type: 'error'});
           });
+
       },
-      
+
+
       showBarsForBeer(beer) {
 
           this.barsToShow = this.barsForCurrentDate.filter(bar => beer.barUUIDs.includes(bar.uuid));

@@ -35,3 +35,4 @@ Route::namespace('Admin')
     ->group(function () {
         Route::resource('bar', 'BarController');
     });
+

@@ -6,6 +6,7 @@
             </span>
             <span class="text-right">
                 <date-change :time-machine-starts-date="timeMachineStartsDate"
+                             :selected-date="selectedDate"
                              @date-changed="dateChanged"
                 ></date-change>
             </span>

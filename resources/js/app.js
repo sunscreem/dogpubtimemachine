@@ -16,9 +16,14 @@ import VTooltip from 'v-tooltip';
 
 Vue.use(VTooltip);
 
+import VueRouter from 'vue-router';
+
+Vue.use(VueRouter);
+
 import smoothscroll from 'smoothscroll-polyfill';
 
 smoothscroll.polyfill();
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -59,7 +64,15 @@ const bugsnagVue = require('bugsnag-vue');
 
 bugsnagClient.use(bugsnagVue(Vue));
 
+
+const router = new VueRouter({mode: 'history',
+                              base: '/',
+                              fallback: true,
+                              routes: [],
+                            });
+
 const app = new Vue({
+  router,
   el: '#app',
 });
 
