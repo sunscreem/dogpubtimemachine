@@ -16,7 +16,7 @@ class PagesController extends Controller
         //     var_dump($time);
         // });
 
-        $bars = Bar::select('name', 'uuid')
+        $bars = Bar::select('name', 'uuid', 'tap_list_last_updated', 'bar_url')
                 ->orderBy('name')
                 ->get();
 
@@ -26,7 +26,7 @@ class PagesController extends Controller
                        ->get()
                        ->sortByDesc('bars_count')
                        ->values();
-     
+
         $initialData = ['beers' => $beers,
                         'bars' => $bars];
 
