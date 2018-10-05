@@ -6,17 +6,17 @@
                :barsCount="barsForCurrentDate.length"
                :timeMachineStartsDate="timeMachineStartsDate"
                @date-changed="dateChanged"></headers>
-      
+
       <div class="row ">
       <div class="col-md-6 mb-4">
-          <beers :beers="beersForCurrentDate" 
+          <beers :beers="beersForCurrentDate"
                  :selectedDate="selectedDate"
                  @showBars="showBarsForBeer"></beers>
-        
+
       </div>
       <div class="col-md-6 mb-4" id="bars">
-        <bars :barsToShow="barsToShow" 
-              :selectedBeer="selectedBeer" 
+        <bars :barsToShow="barsToShow"
+              :selectedBeer="selectedBeer"
               :selectedDate="selectedDate"></bars>
       </div>
     </div>
@@ -60,7 +60,7 @@
         }
         this.beersForCurrentDate = this.initialData.beers;
         this.barsForCurrentDate = this.initialData.bars;
-        this.checkIfQueryStringBeerCanBeViewed();      
+        this.checkIfQueryStringBeerCanBeViewed();
     },
 
     methods: {
@@ -68,31 +68,31 @@
       dateChanged(selectedDate) {
 
         this.selectedDate = selectedDate;
-        
+
         if (!selectedDate){
-             this.beersForCurrentDate = this.initialData.beers; 
+             this.beersForCurrentDate = this.initialData.beers;
              this.barsForCurrentDate =this.initialData.bars;
 
              let newQueryString = Object.assign({},this.$route.query);
              delete newQueryString.d;
              this.$router.push({ query: newQueryString});
-             
-             this.checkIfQueryStringBeerCanBeViewed(); 
+
+             this.checkIfQueryStringBeerCanBeViewed();
              return;
         }
         this.$router.push({ query: Object.assign({}, this.$route.query, { d: this.selectedDate.toJSON() }) });
         this.fetchDataForDate();
       },
-      
+
       fetchDataForDate(){
-        
+
         this.beersForCurrentDate = this.barsForCurrentDate = this.barsToShow = [];
 
         axios.get(route('api.data'),{ params: { date: this.selectedDate.toJSON() } })
         .then((response) => {
             this.beersForCurrentDate = response.data.beers;
             this.barsForCurrentDate = response.data.bars;
-            this.checkIfQueryStringBeerCanBeViewed();              
+            this.checkIfQueryStringBeerCanBeViewed();
          })
           .catch(error => {
               let errorText = (error.status ? error.response.statusText : error);
@@ -107,16 +107,16 @@
       showBarsForBeer(beer) {
 
           this.$router.push({ query: Object.assign({}, this.$route.query, { b: this.$slug(beer.name+' '+beer.brewery).toLowerCase() }) });
-        
+
           this.barsToShow = this.barsForCurrentDate.filter(bar => beer.barUUIDs.includes(bar.uuid));
           this.selectedBeer = beer;
-          
+
       },
 
       checkIfQueryStringBeerCanBeViewed() {
 
           let foundBeer = this.beersForCurrentDate.find((beer)=>{
-              if (this.$slug(beer.name+' '+beer.brewery).toLowerCase() == this.$route.query.b) { return true; }
+              return (this.$slug(beer.name+' '+beer.brewery).toLowerCase() === this.$route.query.b)
           });
 
           if (!foundBeer) { return; }
