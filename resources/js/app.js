@@ -24,7 +24,7 @@ import smoothscroll from 'smoothscroll-polyfill';
 
 smoothscroll.polyfill();
 
-var slug = require('slug');
+var slug = require('slugify');
 
 Vue.prototype.$slug = slug;
 
