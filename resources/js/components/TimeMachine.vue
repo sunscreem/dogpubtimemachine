@@ -110,6 +110,7 @@
 
           this.barsToShow = this.barsForCurrentDate.filter(bar => beer.barUUIDs.includes(bar.uuid));
           this.selectedBeer = beer;
+          document.getElementById("bars").scrollIntoView({behavior:'smooth'});
 
       },
 

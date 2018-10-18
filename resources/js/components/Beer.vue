@@ -1,6 +1,6 @@
 <template>
     <div>
-        <a @click="showBars" class="link">{{ beer.name }} / {{ beer.brewery }} / {{ beersCount }}</a>
+        <a @click.prevent="showBars" href="#" class="link text-dark">{{ beer.name }} / {{ beer.brewery }} / {{ beersCount }}</a>
     </div>
 </template>
 
