@@ -1,7 +1,5 @@
 <?php
 
-use Spatie\EventProjector\Facades\Projectionist;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,4 +33,3 @@ Route::namespace('Admin')
     ->group(function () {
         Route::resource('bar', 'BarController');
     });
-

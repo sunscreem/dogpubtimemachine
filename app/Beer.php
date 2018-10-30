@@ -2,10 +2,10 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
-use Ramsey\Uuid\Uuid;
 use App\Events\BeerCreated;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Ramsey\Uuid\Uuid;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
 
 class Beer extends Model
@@ -38,7 +38,7 @@ class Beer extends Model
         return SchemalessAttributes::scopeWithSchemalessAttributes('extra_attributes');
     }
 
-    public static function createWithAttributes(array $attributes): Beer
+    public static function createWithAttributes(array $attributes): self
     {
         $attributes['uuid'] = (string) Uuid::uuid4();
 
@@ -65,9 +65,8 @@ class Beer extends Model
     /*
      * A helper method to quickly retrieve a beer by uuid.
      */
-    public static function uuid(string $uuid): ?Beer
+    public static function uuid(string $uuid): ?self
     {
         return static::where('uuid', $uuid)->first();
     }
-
 }

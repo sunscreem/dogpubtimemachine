@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Bar;
 use App\Beer;
-use Artisan;
-use Illuminate\Http\Request;
 
 class PagesController extends Controller
 {
@@ -22,13 +20,13 @@ class PagesController extends Controller
 
         $beers = Beer::select('name', 'brewery', 'uuid')
                         ->withCount('bars')
-                        ->having('bars_count','>',0)
+                        ->having('bars_count', '>', 0)
                        ->get()
                        ->sortByDesc('bars_count')
                        ->values();
 
         $initialData = ['beers' => $beers,
-                        'bars' => $bars];
+                        'bars'  => $bars, ];
 
         // $initialData = null;
 

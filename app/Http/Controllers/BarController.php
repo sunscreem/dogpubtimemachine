@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Beer;
-use Illuminate\Http\Request;
 
 class BarController extends Controller
 {
@@ -14,10 +13,10 @@ class BarController extends Controller
             $tapListLastUpdate = ($bar->tap_list_last_updated ? $bar->tap_list_last_updated->diffForHumans() : '-');
 
             return [
-                'name' => $bar->name,
-                'lastChecked' => $lastChecked,
-                'tapListLastUpdated' => $tapListLastUpdate,
-                'brewdog_site_listing_url' => $bar->bar_url
+                'name'                     => $bar->name,
+                'lastChecked'              => $lastChecked,
+                'tapListLastUpdated'       => $tapListLastUpdate,
+                'brewdog_site_listing_url' => $bar->bar_url,
             ];
         });
     }

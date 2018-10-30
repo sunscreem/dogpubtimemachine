@@ -2,17 +2,15 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use App\Bar;
-use Spatie\EventProjector\Models\StoredEvent;
 use App\Beer;
 use App\HistoricData;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Spatie\EventProjector\Models\StoredEvent;
+use Tests\TestCase;
 
 class HistoryDataTest extends TestCase
 {
-
     // use RefreshDatabase; <-- doesnt work with a mysql db and uuids by the looks of it. Sigh.
     use DatabaseMigrations;
 
@@ -20,7 +18,6 @@ class HistoryDataTest extends TestCase
 
     protected $firstBeer;
 
-    
     public function setup()
     {
         Parent::setup();
@@ -45,12 +42,11 @@ class HistoryDataTest extends TestCase
         $this->createBeers(1);
         $this->detachBeerFromBar($this->firstBar, $newBeer);
         $this->updateBar($this->firstBar, ['name' => 'New Test Name']);
-
     }
 
-   /** @test */
-    public function it_should_be_reporting_the_test_setup_counts_correctly(){
-    
+    /** @test */
+    public function it_should_be_reporting_the_test_setup_counts_correctly()
+    {
         $this->assertCount(3, Bar::all());
 
         $this->assertCount(4, Beer::all());
@@ -59,21 +55,20 @@ class HistoryDataTest extends TestCase
 
         $this->assertCount(2, $this->firstBar->fresh()->beers);
 
-        $this->assertCount(12,StoredEvent::all());
+        $this->assertCount(12, StoredEvent::all());
     }
 
     /** @test */
-    public function it_produces_a_history_containing_three_days(){
-
+    public function it_produces_a_history_containing_three_days()
+    {
         $this->artisan('data:rebuild');
 
         $this->assertCount(3, HistoricData::all());
-    
     }
 
     /** @test */
-    public function it_shows_the_correct_number_of_bars_and_beers_for_two_days_ago(){
-
+    public function it_shows_the_correct_number_of_bars_and_beers_for_two_days_ago()
+    {
         $this->artisan('data:rebuild');
 
         $data = HistoricData::find(1)->data;
@@ -81,14 +76,13 @@ class HistoryDataTest extends TestCase
         $this->assertCount(2, $data['bars']);
 
         $this->assertCount(2, $data['beers']);
-     
+
         $firstBeer = $data['beers'][$this->firstBeer->uuid];
         $firstBar = $data['bars'][$this->firstBar->uuid];
 
         $this->assertNotSame('New Test Name', $firstBar['name']);
 
         $this->assertSame($firstBar['uuid'], $firstBeer['barUUIDs'][0]);
-    
     }
 
     /** @test */
@@ -108,17 +102,15 @@ class HistoryDataTest extends TestCase
         $this->assertNotSame('New Test Name', $firstBar['name']);
 
         $this->assertSame($firstBar['uuid'], $firstBeer['barUUIDs'][0]);
-
     }
 
     /** @test */
     public function it_shows_the_correct_number_of_bars_and_beers_for_today()
     {
-
         $this->artisan('data:rebuild');
 
         $data = HistoricData::find(3)->data;
-        
+
         $this->assertCount(3, $data['bars']);
 
         $this->assertCount(2, $data['beers']);
@@ -129,7 +121,5 @@ class HistoryDataTest extends TestCase
         $this->assertSame('New Test Name', $firstBar['name']);
 
         $this->assertSame($firstBar['uuid'], $firstBeer['barUUIDs'][0]);
-
     }
-
 }

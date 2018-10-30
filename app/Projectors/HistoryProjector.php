@@ -2,18 +2,17 @@
 
 namespace App\Projectors;
 
-use Session;
-use App\Beer;
 use App\Bar;
-use Carbon\Carbon;
-use Spatie\EventProjector\Projectors\Projector;
-use Spatie\EventProjector\Projectors\ProjectsEvents;
-use App\Events\BeerCreated;
-use Spatie\EventProjector\Models\StoredEvent;
+use App\Beer;
 use App\Events\BarCreated;
 use App\Events\BarUpdated;
 use App\Events\BeerAttachedToBar;
+use App\Events\BeerCreated;
 use App\Events\BeerDetachedFromBar;
+use Carbon\Carbon;
+use Spatie\EventProjector\Models\StoredEvent;
+use Spatie\EventProjector\Projectors\Projector;
+use Spatie\EventProjector\Projectors\ProjectsEvents;
 
 class HistoryProjector implements Projector
 {
@@ -34,10 +33,10 @@ class HistoryProjector implements Projector
      * Here you can specify which event should trigger which method.
      */
     protected $handlesEvents = [
-        BeerCreated::class => 'onBeerCreated',
-        BarCreated::class => 'onBarCreated',
-        BarUpdated::class => 'onBarUpdate',
-        BeerAttachedToBar::class => 'onBeerAttachedToBar',
+        BeerCreated::class         => 'onBeerCreated',
+        BarCreated::class          => 'onBarCreated',
+        BarUpdated::class          => 'onBarUpdate',
+        BeerAttachedToBar::class   => 'onBeerAttachedToBar',
         BeerDetachedFromBar::class => 'onBeerRemovedFromBar',
     ];
 
@@ -84,11 +83,11 @@ class HistoryProjector implements Projector
         $this->checkDate($storedEvent);
 
         // dump("Attaching beer to a bar.");
-        
+
         $barUUID = $storedEvent->event->attributes['bar_uuid'];
         $beerUUID = $storedEvent->event->attributes['beer_uuid'];
 
-        // if ($barUUID == '6e2964a5-2b1c-4d24-857e-a9dfd6d27e32') { 
+        // if ($barUUID == '6e2964a5-2b1c-4d24-857e-a9dfd6d27e32') {
         //     dump('attaching '.$beerUUID.' to '.$barUUID);
         //     dump('exists?', isset($this->buildData['beers']['b19c11a0-36de-4ded-8e16-08812e38c623']));
         // }
@@ -102,7 +101,7 @@ class HistoryProjector implements Projector
 
         // dump(count($this->buildData['beers'][$beerUUID]['barUUIDs']));
 
-        // if ($barUUID == '6e2964a5-2b1c-4d24-857e-a9dfd6d27e32') { 
+        // if ($barUUID == '6e2964a5-2b1c-4d24-857e-a9dfd6d27e32') {
         //     dump ('and now', $this->buildData['beers'][$beerUUID]);
         //     dump('exists?', isset($this->buildData['beers']['b19c11a0-36de-4ded-8e16-08812e38c623']));
         // }
@@ -117,20 +116,19 @@ class HistoryProjector implements Projector
 
         // dump("Detaching a beer from a bar.");
         // dump('exists?', isset($this->buildData['beers']['b19c11a0-36de-4ded-8e16-08812e38c623']));
-        // dump("Should be away to detach " . $beerUUID . " from " . $barUUID); 
+        // dump("Should be away to detach " . $beerUUID . " from " . $barUUID);
         // dump('bars for '. $beerUUID,$this->buildData['beers'][$beerUUID]['barUUIDs']);
         // dump('index:',collect($this->buildData['beers'][$beerUUID]['barUUIDs'])->search($barUUID));
         // dump('-');
-        
-        // if ($barUUID == '6e2964a5-2b1c-4d24-857e-a9dfd6d27e32') { 
-        //     dump("Should be away to detach ". $beerUUID." from ". $barUUID); 
+
+        // if ($barUUID == '6e2964a5-2b1c-4d24-857e-a9dfd6d27e32') {
+        //     dump("Should be away to detach ". $beerUUID." from ". $barUUID);
         //     dump('exists?', isset($this->buildData['beers']['b19c11a0-36de-4ded-8e16-08812e38c623']));
         // }
-        
+
         $index = collect($this->buildData['beers'][$beerUUID]['barUUIDs'])->search($barUUID);
         unset($this->buildData['beers'][$beerUUID]['barUUIDs'][$index]);
         $this->buildData['beers'][$beerUUID]['bars_count'] = count($this->buildData['beers'][$beerUUID]['barUUIDs']);
-
 
         $newBarsCount = count($this->buildData['beers'][$beerUUID]['barUUIDs']);
 
@@ -156,11 +154,10 @@ class HistoryProjector implements Projector
         if ($eventDate->gt($this->currentDayForData)) {
             // start a new day
             // dump('New event date spotted.');
-            if (!$this->buildData) { 
-                // dump('no data found for this day so moving on.'); 
-            }
-            else {
-                dump('Storing data for '. $this->currentDayForData->toDateTimeString());
+            if (!$this->buildData) {
+                // dump('no data found for this day so moving on.');
+            } else {
+                dump('Storing data for '.$this->currentDayForData->toDateTimeString());
                 $this->data[] = ['dataEndsAtDate' => $this->currentDayForData, 'data' => $this->buildData];
             }
             // dump('And setting new date of '. $eventDate->endOfDay()->toDateTimeString());
@@ -172,10 +169,10 @@ class HistoryProjector implements Projector
     {
         if (!$this->buildData) {
             // dump('no data found for final day.');
-            return; 
+            return;
         }
-        
-        dump('Storing data for ' . $this->currentDayForData->toDateTimeString());
+
+        dump('Storing data for '.$this->currentDayForData->toDateTimeString());
         $this->data[] = ['dataEndsAtDate' => $this->currentDayForData, 'data' => $this->buildData];
     }
 }

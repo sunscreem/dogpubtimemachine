@@ -2,15 +2,15 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
-use Ramsey\Uuid\Uuid;
 use App\Events\BarCreated;
-use Illuminate\Support\Collection;
+use App\Events\BarUpdated;
 use App\Events\BeerAttachedToBar;
 use App\Events\BeerDetachedFromBar;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
+use Ramsey\Uuid\Uuid;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
-use App\Events\BarUpdated;
 
 class Bar extends Model
 {
@@ -43,7 +43,7 @@ class Bar extends Model
         return $this->belongsToMany(\App\Beer::class);
     }
 
-    public static function createWithAttributes(array $attributes): Bar
+    public static function createWithAttributes(array $attributes): self
     {
         $attributes['uuid'] = (string) Uuid::uuid4();
 
@@ -68,22 +68,22 @@ class Bar extends Model
 
         $toBeAttached->each(function ($beerUuid) {
             event(new BeerAttachedToBar(['beer_uuid' => $beerUuid,
-                                        'bar_uuid' => $this->uuid]));
+                                        'bar_uuid'   => $this->uuid, ]));
         });
 
         $toBeDetached->each(function ($beerUuid) {
             event(new BeerDetachedFromBar(['beer_uuid' => $beerUuid,
-                                        'bar_uuid' => $this->uuid]));
+                                        'bar_uuid'     => $this->uuid, ]));
         });
 
         return ['attached' => $toBeAttached,
-                'detached' => $toBeDetached];
+                'detached' => $toBeDetached, ];
     }
 
     /*
      * A helper method to quickly retrieve a bar by uuid.
      */
-    public static function uuid(string $uuid): ?Bar
+    public static function uuid(string $uuid): ?self
     {
         return static::where('uuid', $uuid)->first();
     }
