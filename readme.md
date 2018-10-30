@@ -1,6 +1,8 @@
 ## Dog Pub Time Machine
 
 [![Build Status](https://travis-ci.com/sunscreem/dogpubtimemachine.svg?branch=master)](https://travis-ci.com/sunscreem/dogpubtimemachine)
+[![Style CI Status](https://github.styleci.io/repos/7548986/shield
+)](https://github.styleci.io/repos/138292763)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![PHP from Travis config](https://img.shields.io/travis/php-v/symfony/symfony.svg?style=plastic)
 [![GitHub issues](https://img.shields.io/github/issues/badges/shields.svg?style=plastic)](https://github.com/sunscreem/dogpubtimemachine/issues)
