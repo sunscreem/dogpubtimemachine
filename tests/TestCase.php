@@ -4,8 +4,8 @@ namespace Tests;
 
 use App\Bar;
 use App\Beer;
-use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Spatie\EventProjector\Models\StoredEvent;
+use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -24,11 +24,12 @@ abstract class TestCase extends BaseTestCase
                 ->map(function ($bar) {
                     $newBar = Bar::createWithAttributes($bar->toArray());
                     $this->updateStoredEventDate();
+
                     return $newBar;
                 });
     }
 
-    public function updateBar($bar,$attributes)
+    public function updateBar($bar, $attributes)
     {
         $bar->updateWithAttributes(array_merge($bar->toArray(), $attributes));
 
@@ -37,23 +38,23 @@ abstract class TestCase extends BaseTestCase
 
     public function createBeers($count)
     {
-       return factory(Beer::class, $count)
+        return factory(Beer::class, $count)
             ->make()
             ->map(function ($beer) {
                 $newBeer = Beer::createWithAttributes($beer->setAppends([])->toArray());
                 $this->updateStoredEventDate();
+
                 return $newBeer;
             });
     }
 
-    public function attachBeersToBar($bar,$beers)
+    public function attachBeersToBar($bar, $beers)
     {
         $lastIDofStoredEvents = StoredEvent::latest('id')->first()->id;
 
         $bar->syncBeers($beers->pluck('uuid'));
 
         $this->updateStoredEventDate($lastIDofStoredEvents);
-        
     }
 
     public function detachBeerFromBar($bar, $beer)
@@ -69,14 +70,15 @@ abstract class TestCase extends BaseTestCase
         $this->updateStoredEventDate($lastIDofStoredEvents);
     }
 
-    private function updateStoredEventDate($lastIDofStoredEvents=null)
+    private function updateStoredEventDate($lastIDofStoredEvents = null)
     {
-        if (!$this->date) {
+        if (! $this->date) {
             return;
         }
 
-        if ($lastIDofStoredEvents){
-            StoredEvent::where('id','>',$lastIDofStoredEvents)->update(['created_at' => $this->date]);
+        if ($lastIDofStoredEvents) {
+            StoredEvent::where('id', '>', $lastIDofStoredEvents)->update(['created_at' => $this->date]);
+
             return;
         }
 

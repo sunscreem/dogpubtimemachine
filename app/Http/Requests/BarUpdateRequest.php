@@ -28,7 +28,7 @@ class BarUpdateRequest extends FormRequest
             'territory' => 'required',
             'bar_url' => 'required|url',
             'tap_list_url' => 'required|url',
-            'uuid' => 'string'
+            'uuid' => 'string',
         ];
     }
 }

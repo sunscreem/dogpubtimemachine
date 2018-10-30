@@ -4,9 +4,9 @@ namespace App\Projectors;
 
 use App\Bar;
 use App\Events\BarCreated;
+use App\Events\BarUpdated;
 use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\Projectors\ProjectsEvents;
-use App\Events\BarUpdated;
 
 class BarsProjector implements Projector
 {
@@ -33,7 +33,7 @@ class BarsProjector implements Projector
             ->update(['name' => $event->barAttributes['name'],
                         'territory' => $event->barAttributes['territory'],
                         'bar_url' => $event->barAttributes['bar_url'],
-                        'tap_list_url' => $event->barAttributes['tap_list_url']]);
+                        'tap_list_url' => $event->barAttributes['tap_list_url'], ]);
     }
 
     public function resetState()
