@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use Cache;
 use Goutte;
 use App\Bar;
 use App\Beer;
@@ -46,10 +45,10 @@ class FetchBrewdogBeers extends Command
 
         $crawler = Goutte::request('GET', $barToUpdate->tap_list_url);
 
-        $this->info('Fetching bar menus for ' . $barToUpdate->name);
+        $this->info('Fetching bar menus for '.$barToUpdate->name);
 
         // check for content
-        if (!$crawler->filter('.onTap span + span')->count()) {
+        if (! $crawler->filter('.onTap span + span')->count()) {
             // bar isn't giving us data
 
             $barToUpdate->update(['tap_list_last_updated' => null]);
@@ -71,11 +70,12 @@ class FetchBrewdogBeers extends Command
         $crawler->filter('.onTapInfo .category')->each(function ($category) use (&$onTapBeers) {
             $categoryTitle = strtolower($category->filter('.title')->text());
 
-            $this->line('Category Found: ' . $categoryTitle);
+            $this->line('Category Found: '.$categoryTitle);
             // dump($categoryTitle); // debug
 
             if (str_contains($categoryTitle, config('site.categoryWordsToSkip'))) {
                 $this->line(' - contains a word from the skip list - skipped');
+
                 return;
             }
 
@@ -93,19 +93,19 @@ class FetchBrewdogBeers extends Command
             });
         });
 
-        $this->line(count($onTapBeers) . ' beers found in total');
+        $this->line(count($onTapBeers).' beers found in total');
 
         $thisBarsBeerIds = collect($onTapBeers)->map(function ($beer) {
             return $this->fetchOrCreateBeerID($beer);
         });
 
-        $this->line('Tap list reporting as being last updated: ' . $tapListLastUpdated->diffForHumans());
+        $this->line('Tap list reporting as being last updated: '.$tapListLastUpdated->diffForHumans());
 
         $barToUpdate->update(['tap_list_last_updated' => $tapListLastUpdated]);
 
         $result = $barToUpdate->syncBeers($thisBarsBeerIds);
 
-        $this->info('All done. (' . count($result['attached']) . ' Added, ' . count($result['detached']) . ' Detached)');
+        $this->info('All done. ('.count($result['attached']).' Added, '.count($result['detached']).' Detached)');
     }
 
     private function fetchOrCreateBeerID($tapBeer)
@@ -114,14 +114,14 @@ class FetchBrewdogBeers extends Command
 
         // dump($tapBeer, $matches); //debug
 
-        if (!isset($matches[1])) {
+        if (! isset($matches[1])) {
             $matches[1] = '-';
         }
 
         // dump('looking for', $tapBeer[0], $tapBeer[1]);
         $ourBeer = Beer::where(['name' => $tapBeer[0], 'brewery' => $matches[1]])->first();
 
-        if (!$ourBeer) {
+        if (! $ourBeer) {
             $ourBeer = Beer::createWithAttributes(['name' => $tapBeer[0], 'brewery' => $matches[1]]);
         }
 
@@ -134,11 +134,11 @@ class FetchBrewdogBeers extends Command
 
         $hours = 0;
 
-        $minutes = (int)trim(substr(trim($hoursAndMinutes[0]), 0, 2));
+        $minutes = (int) trim(substr(trim($hoursAndMinutes[0]), 0, 2));
 
         if (count($hoursAndMinutes) == 2) {
-            $hours = (int)trim(substr($hoursAndMinutes[0], 0, 2));
-            $minutes = (int)trim(substr(trim($hoursAndMinutes[1]), 0, 2));
+            $hours = (int) trim(substr($hoursAndMinutes[0], 0, 2));
+            $minutes = (int) trim(substr(trim($hoursAndMinutes[1]), 0, 2));
         }
 
         // dd($lastUpdatedText, $hoursAndMinutes, $hours, $minutes); // debug

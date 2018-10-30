@@ -2,11 +2,11 @@
 
 namespace App\Projectors;
 
+use App\Bar;
+use App\Events\BeerAttachedToBar;
+use App\Events\BeerDetachedFromBar;
 use Spatie\EventProjector\Projectors\Projector;
 use Spatie\EventProjector\Projectors\ProjectsEvents;
-use App\Events\BeerAttachedToBar;
-use App\Bar;
-use App\Events\BeerDetachedFromBar;
 
 class BarsBeersProjector implements Projector
 {

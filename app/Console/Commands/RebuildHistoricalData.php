@@ -2,11 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use Carbon\Carbon;
-use Spatie\EventProjector\Facades\Projectionist;
-use App\Projectors\HistoryProjector;
 use App\HistoricData;
+use Illuminate\Console\Command;
+use App\Projectors\HistoryProjector;
+use Spatie\EventProjector\Facades\Projectionist;
 
 class RebuildHistoricalData extends Command
 {
@@ -41,15 +40,17 @@ class RebuildHistoricalData extends Command
         Projectionist::replay(collect([$projector]));
         $projector->addFinalDay();
 
-        $this->info('Built data for ' . count($projector->data) . ' days');
+        $this->info('Built data for '.count($projector->data).' days');
 
         collect($projector->data)->each(function ($dayData) {
-            if (!$dayData['data']) { return; }
+            if (! $dayData['data']) {
+                return;
+            }
             HistoricData::create($dayData);
         });
 
         $lastEntry = collect($projector->data)->last()['data'];
 
-        $this->info('Done. Right now there are ' . count($lastEntry['bars']) . ' bars showing ' . count($lastEntry['beers']) . ' beers.');
+        $this->info('Done. Right now there are '.count($lastEntry['bars']).' bars showing '.count($lastEntry['beers']).' beers.');
     }
 }

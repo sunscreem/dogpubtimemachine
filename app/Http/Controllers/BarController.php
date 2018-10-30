@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Beer;
-use Illuminate\Http\Request;
 
 class BarController extends Controller
 {
@@ -17,7 +16,7 @@ class BarController extends Controller
                 'name' => $bar->name,
                 'lastChecked' => $lastChecked,
                 'tapListLastUpdated' => $tapListLastUpdate,
-                'brewdog_site_listing_url' => $bar->bar_url
+                'brewdog_site_listing_url' => $bar->bar_url,
             ];
         });
     }

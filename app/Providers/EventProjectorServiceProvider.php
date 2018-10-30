@@ -2,12 +2,11 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Spatie\EventProjector\Facades\Projectionist;
 use App\Projectors\BarsProjector;
 use App\Projectors\BeersProjector;
 use App\Projectors\BarsBeersProjector;
-use App\Projectors\HistoryProjector;
+use Illuminate\Support\ServiceProvider;
+use Spatie\EventProjector\Facades\Projectionist;
 
 class EventProjectorServiceProvider extends ServiceProvider
 {
@@ -22,6 +21,5 @@ class EventProjectorServiceProvider extends ServiceProvider
                                         BeersProjector::class,
                                         BarsBeersProjector::class,
         ]);
-                                       
     }
 }
