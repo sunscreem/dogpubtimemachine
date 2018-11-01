@@ -89,17 +89,11 @@
         this.beersForCurrentDate = this.barsForCurrentDate = this.barsToShow = [];
 
         axios.get(route('api.data'),{ params: { date: this.selectedDate.toJSON() } })
-        .then((response) => {
-            this.beersForCurrentDate = response.data.beers;
-            this.barsForCurrentDate = response.data.bars;
+        .then((data) => {
+            this.beersForCurrentDate = data.beers;
+            this.barsForCurrentDate = data.bars;
             this.checkIfQueryStringBeerCanBeViewed();
-         })
-          .catch(error => {
-              let errorText = (error.status ? error.response.statusText : error);
-              this.$swal({text: errorText,
-                   title: 'Something went wrong!',
-                   type: 'error'});
-          });
+         });
 
       },
 

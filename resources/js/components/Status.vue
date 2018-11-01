@@ -25,14 +25,7 @@
        methods:{
            fetchSystemStatus() {
                axios.get(route('system.status'))
-               .then((response)=>{
-                    this.stats = response.data;
-                })
-                .catch(error => {
-                    this.$swal({text: (error.response ? error.response.statusText : 'Are you offline?'),
-                                title: 'Something went wrong!',
-                                type: 'error'});
-                });
+               .then((data)=>{ this.stats = data; });
            },
           
        }
