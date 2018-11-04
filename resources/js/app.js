@@ -33,16 +33,22 @@ Vue.prototype.$slug = slug;
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-Vue.component('beers', require('./components/Beers.vue'));
-Vue.component('beer', require('./components/Beer.vue'));
-Vue.component('bars', require('./components/Bars.vue'));
-Vue.component('bar', require('./components/Bar.vue'));
+// Vue.component('beers', require('./components/Beers.vue'));
+// Vue.component('beer', require('./components/Beer.vue'));
+// Vue.component('bars', require('./components/Bars.vue'));
+// Vue.component('bar', require('./components/Bar.vue'));
 
-Vue.component('headers', require('./components/Headers.vue'));
-Vue.component('time-machine', require('./components/TimeMachine.vue'));
-Vue.component('system-status', require('./components/Status.vue'));
+// Vue.component('headers', require('./components/Headers.vue'));
+// Vue.component('time-machine', require('./components/TimeMachine.vue'));
+// Vue.component('system-status', require('./components/Status.vue'));
 
-Vue.component('date-change', require('./components/DateChange.vue'));
+// Vue.component('date-change', require('./components/DateChange.vue'));
+
+const files = require.context('./', true, /\.vue$/i)
+
+files.keys().map(key => {
+    return Vue.component(_.last(key.split('/')).split('.')[0], files(key))
+})
 
 Vue.filter('formatDate',function formatDate(date) {
   // this could be done better
