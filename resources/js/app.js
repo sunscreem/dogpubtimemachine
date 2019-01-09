@@ -47,7 +47,7 @@ Vue.prototype.$slug = slug;
 const files = require.context('./', true, /\.vue$/i)
 
 files.keys().map(key => {
-    return Vue.component(_.last(key.split('/')).split('.')[0], files(key))
+  return Vue.component(_.last(key.split('/')).split('.')[0], files(key).default)
 })
 
 Vue.filter('formatDate',function formatDate(date) {
