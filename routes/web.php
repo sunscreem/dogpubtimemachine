@@ -24,6 +24,8 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/bars-status', 'SystemStatusController@bars')->name('bars-status');
+
 // Route::get('/test', 'TestController@index');
 
 Route::namespace('Admin')

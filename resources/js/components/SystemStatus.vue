@@ -6,7 +6,8 @@
             Total bars checked in the last 2 hours: {{ stats.totalBarsCheckedInTwoHours }}<br>
             Last bar was checked: {{ stats.lastBarChecked }}<br>
             Total bars updated their tap lists in the last 3 days: {{ stats.totalBarUpdatedTapListInLastThreeDays }}<br>
-            Bars not currently showing taplists on brewdog.com: {{ stats.barsNotShowingTapLists }}<br>                    
+            <a href="/bars-status">Bars Status</a>
+            <!-- Bars not currently showing taplists on brewdog.com: {{ stats.barsNotShowingTapLists }}<br>                     -->
         </div>
     </div>
 </template>
