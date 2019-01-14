@@ -14,7 +14,7 @@ class SystemStatusController extends Controller
 
         dd($totalBrewdogBars);
 
-        $lastBarChecked = $lastBar->updated_at->diffForHumans().' ('.$lastBar->name.')';
+        $lastBarChecked = $lastBar->updated_at->diffForHumans() . ' (' . $lastBar->name . ')';
 
         $totalBarsCheckedInTwoHours = Bar::where('updated_at', '>', now()->subHours(2))->count();
 
@@ -24,7 +24,7 @@ class SystemStatusController extends Controller
 
         $barsNotShowingTapLists = implode(', ', $barsNotShowingTapLists);
 
-        if (! $barsNotShowingTapLists) {
+        if (!$barsNotShowingTapLists) {
             $barsNotShowingTapLists = '-';
         }
 
@@ -40,10 +40,10 @@ class SystemStatusController extends Controller
     public function bars()
     {
         $bars = Bar::orderByRaw("FIELD(territory, 'UK', 'USA', 'International')")
-                    ->orderBy('name')
-                    ->withCount('beers')
-                    ->get();
+            ->orderBy('name')
+            ->withCount('beers')
+            ->get();
 
-        return view('bars-status',compact('bars'));
+        return view('bars-status', compact('bars'));
     }
 }
