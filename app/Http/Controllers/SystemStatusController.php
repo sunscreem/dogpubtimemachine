@@ -12,8 +12,6 @@ class SystemStatusController extends Controller
 
         $lastBar = Bar::orderBy('updated_at', 'desc')->first();
 
-        dd($totalBrewdogBars);
-
         $lastBarChecked = $lastBar->updated_at->diffForHumans() . ' (' . $lastBar->name . ')';
 
         $totalBarsCheckedInTwoHours = Bar::where('updated_at', '>', now()->subHours(2))->count();
