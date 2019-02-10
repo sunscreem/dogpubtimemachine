@@ -6,7 +6,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![PHP from Travis config](https://img.shields.io/travis/php-v/symfony/symfony.svg?style=plastic)
 [![GitHub issues](https://img.shields.io/github/issues/badges/shields.svg?style=plastic)](https://github.com/sunscreem/dogpubtimemachine/issues)
-[![Twitter URL](https://img.shields.io/twitter/url/http/shields.io.svg?style=plastic)](https://twitter.com/sunscreem)
+[![Twitter URL](https://img.shields.io/twitter/url/http/shields.io.svg?style=plastic)](https://twitter.com/sunscreem) [![Greenkeeper badge](https://badges.greenkeeper.io/sunscreem/dogpubtimemachine.svg)](https://greenkeeper.io/)
 
 # Note To Developers
 
