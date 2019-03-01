@@ -20,7 +20,7 @@
     "sass": "^1.15.3",
     "sass-loader": "^7.1.0",
     "vue": "^2.6.8",
-    "vue-template-compiler": "^2.5.21"
+    "vue-template-compiler": "^2.6.8"
   },
   "dependencies": {
     "bugsnag-js": "^4.7.2",
